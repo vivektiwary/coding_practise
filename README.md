@@ -20,7 +20,7 @@
 > For example: (Please refer to the image given below to understand better.)
 > Suppose you have to update all the nodes in range [0:2], (this symbol means, both are included)
 > We don't have to update all the nodes in that given range if we use lazy propagation. We only
-> have to update node representing (0:2) and mark it immediate children lazy.
+> have to update node representing (0:2) (which is node = 1 in below image) and mark it immediate children lazy.
 > 	* We need an auxilary space for storing the nodes which have been marked lazy.
 >   * We need to update the node values only when searching.
 
@@ -85,5 +85,33 @@
 		updateRange(left, start, mid, l, r, val, count, lazy);
 		updateRange(right, mid + 1, end, l, r, val, count, lazy);
 		count[node] = count[node * 2 + 1] + count[node * 2 + 2];
+	}
+```
+* Code for `range query`:
+```c++
+	int searchRange(int node, int start, int end, int l, int r, int count[], int lazy[]) {
+		// Check if this node is marked for lazy updation and if yes, udpate it.
+		if (lazy[node] != 0) {
+			if (start == end) {
+				count[node] ^= 1;
+			}
+			else {
+				if (count[node] > 0) {
+						count[node] = ((end - start + 1) * lazy[node] - count[node]);
+				}
+				else {
+						count[node] += (end - start + 1) * lazy[node];
+				}
+				lazy[node*2 + 1] ^= lazy[node];
+				lazy[node*2 + 2] ^= lazy[node];
+			}
+			lazy[node] = 0;
+		}
+		if (start > end || start > r || end < l) return 0;
+		if (start >= l && end <= r)  return count[node];
+		int mid = (start + end) / 2 ;
+		int p1 = searchRange((node * 2) + 1, start, mid, l, r, count, lazy);
+		int p2 = searchRange((node * 2) + 2, mid + 1, end, l, r, count, lazy);
+		return p1 + p2;
 	}
 ```
