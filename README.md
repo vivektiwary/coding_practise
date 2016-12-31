@@ -16,7 +16,13 @@
 > Lazy propagation refers to a mechanism where we do not update all the nodes in a 
 > given range. Rather than that, we lazily update the parent node of a range and mark
 > its children for `lazy update`.
-> For example: Please refer to the image given below to understand better.
+
+> For example: (Please refer to the image given below to understand better.)
+> Suppose you have to update all the nodes in range [0:2], (this symbol means, both are included)
+> We don't have to update all the nodes in that given range if we use lazy propagation. We only
+> have to update node representing (0:2) and mark it immediate children lazy.
+> 	* We need an auxilary space for storing the nodes which have been marked lazy.
+>   * We need to update the node values only when searching.
 
 ![Image for segment tree]
 (/images/segment_tree.jpg)
