@@ -165,7 +165,7 @@ Proof:
 ![image for arithmetic2](/images/arithmetic_seq_square.png)
  
 Proof:  
-> We know that ![image_for_lemma](/images/arithmetic_lemma.png) (can be proved using mathematical induction). So ![image for first step](/images/arithmetic_sqr_proof_step_1.png) which can be written as ![image for step2](/images/arithmetic_sqr_proof_step_2.png).  
-> By reducing the above equation we will get ![image for arithmetic2](/images/arithmetic_seq_1.png)
+> We know that  &nbsp; &nbsp; ![image_for_lemma](/images/arithmetic_lemma.png) &nbsp; &nbsp; (can be proved using mathematical induction). So  &nbsp; &nbsp; ![image for first step](/images/arithmetic_sqr_proof_step_1.png) &nbsp; &nbsp; which can be written as &nbsp; &nbsp; ![image for step2](/images/arithmetic_sqr_proof_step_2.png). &nbsp; &nbsp;  
+> By reducing the above equation we will get &nbsp; &nbsp; ![image for arithmetic2](/images/arithmetic_seq_1.png)
  
  
