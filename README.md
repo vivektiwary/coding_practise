@@ -115,3 +115,35 @@
 		return p1 + p2;
 	}
 ```
+
+* Algorithm for calculating polynomial equations:
+> ![](/images/pol_equation.png)
+> 
+> We need to calculate p(x)
+ 
+ One naive algorithm or brute force algorithm would be:
+ 
+ ```c++
+     int p = a[0] ;
+     int xpower = 1;
+     for (int i = 1; i <= n; ++i) {
+        xpower = x ∗ xpower;
+        p = p + a i ∗ xpower;
+     }
+ ```
+ > In this algorithm we have to perform 2*n multiplications and n additions. Which is not that good.
+ 
+ > One better algorithm is `Horner's Method`:
+ 
+ ```c++
+    int res = 0;
+    for (int i = n; i <= 0; --i) {
+        res = (res * x) + a[i];
+    }
+    return res;
+ ```
+ > This algorithm assumes the fact that,
+ > ![](/images/pol_equation.png) can be written as
+ > ![](/images/pol_equation_1.png)
+ > If we go on like that we will have `a[n]` and next one will be
+ > `a[n-1]*x`.
