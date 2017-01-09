@@ -116,6 +116,7 @@
 	}
 ```
 
+## Useful algorithms
 * Algorithm for calculating polynomial equations:
 > ![image for equation 1](/images/pol_equation.png)
 > 
