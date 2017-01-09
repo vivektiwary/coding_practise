@@ -148,3 +148,15 @@
  > ![image for equation2](/images/pol_equation_1.png)
  > If we go on like that we will have `a[n]` and next one will be
  > `a[n-1]*x`.
+ 
+ ## Mathematical formulas and proofs
+ * Sum of 1 to n:
+  > ![image_for_arithmetic](/images/arithmatic_sequence.png)
+  
+  Proof:
+  > Suppose S(n) = 1 + 2 + . . . + n     &nbsp; &nbsp; &nbsp; &nbsp; (eq 1)  
+  > We can also say that, S(n) = n + n-1 + n-2 + . . . + 1 &nbsp; &nbsp; &nbsp; &nbsp; (eq 2)   
+  > Adding eq 1 and eq 2, we have,
+  > 2 S(n) = (n + 1) + (n + 1) + . . . (n + 1)  
+  > We should note that each number is (n + 1) and there are n elements. So the sum would be: n * (n + 1).
+  > So ![image for arithmetic2](/images/arithmetic_seq_1.png)
