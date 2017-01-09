@@ -150,7 +150,7 @@
  > `a[n-1]*x`.
  
  ## Mathematical formulas and proofs
- * Sum of 1 to n
+ * Sum of 1 to n  
  ![image_for_arithmetic](/images/arithmatic_sequence.png)
   
   Proof:
@@ -160,3 +160,6 @@
   > 2 S(n) = (n + 1) + (n + 1) + . . . (n + 1)  
   > We should note that each number is (n + 1) and there are n elements. So the sum would be: n * (n + 1).
   > So ![image for arithmetic2](/images/arithmetic_seq_1.png)
+  
+ * Sum of square of a sequence
+ 
