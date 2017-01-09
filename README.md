@@ -151,7 +151,7 @@
  
  ## Mathematical formulas and proofs
  * Sum of 1 to n
- > ![image_for_arithmetic](/images/arithmatic_sequence.png)
+ ![image_for_arithmetic](/images/arithmatic_sequence.png)
   
   Proof:
   > Suppose S(n) = 1 + 2 + . . . + n     &nbsp; &nbsp; &nbsp; &nbsp; (eq 1)  
