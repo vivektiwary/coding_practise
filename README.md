@@ -161,5 +161,11 @@
   > We should note that each number is (n + 1) and there are n elements. So the sum would be: n * (n + 1).
   > So ![image for arithmetic2](/images/arithmetic_seq_1.png)
   
- * Sum of square of a sequence
+ * Sum of square of a sequence  
+ ![image for arithmetic2](/images/arithmetic_seq_square.png)
+ 
+ Proof:  
+ > We know that ![image_for_lemma](/images/arithmetic_lemma.png) (can be proved using mathematical induction). So ![image for first step](/images/arithmetic_sqr_proof_step_1.png) which can be written as ![image for step2](/images/arithmetic_sqr_proof_step_2.png).  
+ > By reducing the above equation we will get ![image for arithmetic2](/images/arithmetic_seq_1.png)
+ 
  
