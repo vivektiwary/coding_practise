@@ -143,7 +143,7 @@
     return res;
  ```
  > This algorithm assumes the fact that,
- > ![](/images/pol_equation.png) can be written as
- > ![](/images/pol_equation_1.png)
+ > ![image for equation1](/images/pol_equation.png) can be written as
+ > ![image for equation2](/images/pol_equation_1.png)
  > If we go on like that we will have `a[n]` and next one will be
  > `a[n-1]*x`.
