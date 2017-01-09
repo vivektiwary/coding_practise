@@ -117,7 +117,8 @@
 ```
 
 * Algorithm for calculating polynomial equations:
-> ![](/images/pol_equation.png)
+> ![image for equation 1]
+(/images/pol_equation.png)
 > 
 > We need to calculate p(x)
  
@@ -143,7 +144,9 @@
     return res;
  ```
  > This algorithm assumes the fact that,
- > ![image for equation1](/images/pol_equation.png) can be written as
- > ![image for equation2](/images/pol_equation_1.png)
+ > ![image for equation1]
+ (/images/pol_equation.png) can be written as
+ > ![image for equation2]
+ (/images/pol_equation_1.png)
  > If we go on like that we will have `a[n]` and next one will be
  > `a[n-1]*x`.
