@@ -172,5 +172,4 @@ Proof:
 ![image for arithmetic3](/images/arithmetic_seq_cubes.png)
  
 Proof:
-> We can prove this by induction. There is another way of proving this by using.
->![link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
+> We can prove this by induction. There is another way of proving this by using [link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
