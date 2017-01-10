@@ -115,39 +115,6 @@
 		return p1 + p2;
 	}
 ```
-
-## Useful algorithms
-* Algorithm for calculating polynomial equations:
-> ![image for equation 1](/images/pol_equation.png)
-> 
-> We need to calculate p(x)
- 
- One naive algorithm or brute force algorithm would be:
- 
- ```c++
-     int p = a[0] ;
-     int xpower = 1;
-     for (int i = 1; i <= n; ++i) {
-        xpower = x ∗ xpower;
-        p = p + a i ∗ xpower;
-     }
- ```
- > In this algorithm we have to perform 2*n multiplications and n additions. Which is not that good.
- 
- > One better algorithm is `Horner's Method`:
- 
- ```c++
-    int res = 0;
-    for (int i = n; i <= 0; --i) {
-        res = (res * x) + a[i];
-    }
-    return res;
- ```
- > This algorithm assumes the fact that,
- > ![image for equation1](/images/pol_equation.png) can be written as
- > ![image for equation2](/images/pol_equation_1.png)
- > If we go on like that we will have `a[n]` and next one will be
- > `a[n-1]*x`.
  
 ## Mathematical formulas and proofs
 * Sum of 1 to n  
@@ -186,3 +153,35 @@ Proof:
 > &nbsp; &nbsp; They are 3, 5, 7. So the number of repetition for each of them is 1.  
 > &nbsp; &nbsp; So we can say that the number of  
 > &nbsp; &nbsp; factors would be (1 + 1) * (1 + 1) * (1 + 1) = 8
+
+* Algorithm for calculating polynomial equations:
+> ![image for equation 1](/images/pol_equation.png)
+> 
+> We need to calculate p(x)
+ 
+ One naive algorithm or brute force algorithm would be:
+ 
+ ```c++
+     int p = a[0] ;
+     int xpower = 1;
+     for (int i = 1; i <= n; ++i) {
+        xpower = x ∗ xpower;
+        p = p + a i ∗ xpower;
+     }
+ ```
+ > In this algorithm we have to perform 2*n multiplications and n additions. Which is not that good.
+ 
+ > One better algorithm is `Horner's Method`:
+ 
+ ```c++
+    int res = 0;
+    for (int i = n; i <= 0; --i) {
+        res = (res * x) + a[i];
+    }
+    return res;
+ ```
+ > This algorithm assumes the fact that,
+ > ![image for equation1](/images/pol_equation.png) can be written as
+ > ![image for equation2](/images/pol_equation_1.png)
+ > If we go on like that we will have `a[n]` and next one will be
+ > `a[n-1]*x`.
