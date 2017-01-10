@@ -176,7 +176,8 @@ Proof:
 
 ## Mathematical concepts and Algorithms
 * Finding the number of factors of a given number  
-> Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.  
+> Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.
+  
 > Ex:  
 > &nbsp; &nbsp; Let the number be 105.  
 > &nbsp; &nbsp; &nbsp; The factors of this number are 1, 3, 5, 7, 15, 21, 35, 105. Which is 8.  
