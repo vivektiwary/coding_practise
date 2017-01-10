@@ -13,6 +13,21 @@
       class &nbsp; ![image for theta](/images/algo_analysis_theta_rel.png).  
       What about f (n) = &nbsp; ![image for n_square](/images/algo_analysis_n_square.png) &nbsp;  and g(n) = &nbsp; ![image for n cube](/images/algo_analysis_n_cube.png) &nbsp; ? Since  
         ![image for ex2](/images/algo_analysis_dominance_ex_2.png)
+        
+        
+* **Problem for finding the big oh**
+
+    Problem: Is &nbsp; ![big oh example 1](/images/big_oh_ex_1.png) ?  
+    Solution:  
+    For solving these kinds of problem we should always go by the definition.
+    > So, f(n) = O(g(n)) if and only if there exists a constant c such that for all sufficiently large n,  f(n) <= c * g(n).
+    
+    We can see that &nbsp; ![image for example 2](/images/big_oh_ex_2.png) &nbsp; for any c >= 2.
+     >Also, &nbsp; ![image for omega gn](/images/omega_gn.png) &nbsp; iff there exists a constant c > 0 such that for all sufficiently large n f(n) > c * g(n).
+     
+    This would be satisfied for any 0 < c <= 2.  
+    Together the big oh and omega bounding imply &nbsp; ![big on example 1](/images/big_oh_ex_1.png).
+
 
 ## Important data structures concepts:
 * **Segment Trees**:
@@ -153,18 +168,74 @@
     Proof:
     > We can prove this by induction. There is another way of proving this by using [link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
 
+* **Logarithm and its use**
+
+    The `Harmonic numbers` arise as a special case of
+    arithmetic progression, namely
+    H(n) = S(n, −1). They reflect the sum of the progression
+    of simple reciprocals, namely  
+    ![log harmonic](/images/log_harmonic.png)
+      
+    > The Harmonic numbers prove important because they usually
+    explain “where the log comes from” when one magically pops
+    out from algebraic manipulation. For example, the key to
+    analyzing the average case complexity of Quicksort is the
+    summation &nbsp; ![log harmonic sum](/images/log_harmonic_sum.png)  
+     Employing the Harmonic number identity immediately
+     reduces this to &nbsp; ![image for n log n](/images/theta_n_log_n.png)
+
+    _Important properties_:  
+        ![log property 1](/images/log_property_1.png)  
+        ![log_property 2](/images/log_property_2.png)  
+    
+    _Observations_:  
+        
+     * **The base of the logarithm has no real impact on the growth rate**: 
+        
+        Compare the following three values:   
+             ![log value example](/images/log_value_example.png)  
+        A big change in the base of the logarithm produces 
+        little difference in the value of the log. Changing
+        the base of the log from a to c involves dividing by
+        &nbsp; ![log c a](/images/log_c_a.png). This conversion factor is lost to
+        the Big Oh notation whenever a and c are constants.
+        Thus we are usually justified in ignoring the base of
+        the logarithm when analyzing algorithms.
+        
+     * **Logarithms cut any function down to size**:  
+        The growth rate of the logarithm of any polynomial
+        function is O(lg n). This follows because  
+        ![log power reduction](/images/log_power_reduction.png)
+            
+    #### Importance of even split  
+    
+    Problem:   
+    How many queries does binary search take on
+    the million-name Manhattan phone book if each split
+    was 1/3 to 2/3 instead of 1/2 to 1/2?
+    
+    Solution:   
+    When performing binary searches in a
+    telephone book, how important is it that each query
+    split the book exactly in half? Not much. For the
+    Manhattan telephone book, we now use &nbsp;
+    ![image for even split](/images/log_base_example_1.png) &nbsp; queries in the worst case,
+    not a significant change from &nbsp;
+    ![image for even split](/images/log_base_example_2.png) &nbsp;. The power of binary search
+    comes from its logarithmic complexity, not the base of
+    the log. 
+
 ## Mathematical concepts and Algorithms
 * **Finding the number of factors of a given number**  
-
-    > Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.
-      
-    > Ex:  
-    > &nbsp; &nbsp; Let the number be 105.  
-    > &nbsp; &nbsp; The factors of this number are 1, 3, 5, 7, 15, 21, 35, 105. Which is 8.  
-    > &nbsp; &nbsp; Now consider the prime factors of 105.  
-    > &nbsp; &nbsp; They are 3, 5, 7. So the number of repetition for each of them is 1.  
-    > &nbsp; &nbsp; So we can say that the number of  
-    > &nbsp; &nbsp; factors would be (1 + 1) * (1 + 1) * (1 + 1) = 8
+    
+    > Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.  
+     Ex:  
+     &nbsp; &nbsp; Let the number be 105.  
+     &nbsp; &nbsp; The factors of this number are 1, 3, 5, 7, 15, 21, 35, 105. Which is 8.  
+     &nbsp; &nbsp; Now consider the prime factors of 105.  
+     &nbsp; &nbsp; They are 3, 5, 7. So the number of repetition for each of them is 1.  
+     &nbsp; &nbsp; So we can say that the number of  
+     &nbsp; &nbsp; factors would be (1 + 1) * (1 + 1) * (1 + 1) = 8
 
 * **Algorithm for calculating polynomial equations:**  
 
