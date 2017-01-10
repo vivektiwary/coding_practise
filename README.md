@@ -155,6 +155,7 @@ Proof:
 > &nbsp; &nbsp; factors would be (1 + 1) * (1 + 1) * (1 + 1) = 8
 
 * **Algorithm for calculating polynomial equations:**  
+
 > ![image for equation 1](/images/pol_equation.png)
 > 
 > We need to calculate p(x)
