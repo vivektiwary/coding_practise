@@ -173,3 +173,14 @@ Proof:
  
 Proof:
 > We can prove this by induction. There is another way of proving this by using [link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
+
+## Mathematical concepts and Algorithms
+* Finding the number of factors of a given number
+>Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.  
+>Ex:  
+> &nbsp; &nbsp; Let the number be 105.  
+> &nbsp; &nbsp; &nbsp; The factors of this number are 1, 3, 5, 7, 15, 21, 35, 105. Which is 8.  
+> &nbsp; &nbsp; &nbsp; Now consider the prime factors of 105.  
+> &nbsp; &nbsp; &nbsp; They are 3, 5, 7. So the number of repetition for each of them is 1.  
+> &nbsp; &nbsp; &nbsp; So we can say that the number of  
+> &nbsp; &nbsp; &nbsp; factors would be (1 + 1) * (1 + 1) * (1 + 1) = 8
