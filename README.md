@@ -176,6 +176,7 @@ Proof:
 
 ## Mathematical concepts and Algorithms
 * Finding the number of factors of a given number  
+
 > Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.
   
 > Ex:  
