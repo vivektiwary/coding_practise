@@ -11,7 +11,7 @@
       ![image for example](/images/algo_analysis_dominance_ex_1.png)  
       This is to be expected because both functions are in the
       class &nbsp; ![image for theta](/images/algo_analysis_theta_rel.png).  
-      What about f (n) = n 3 and g(n) = n 2 ? Since  
+      What about f (n) = &nbsp; ![image for n_square](/images/algo_analysis_n_square.png) &nbsp;  and g(n) = &nbsp; ![image for n cube](/images/algo_analysis_n_cube.png) &nbsp; ? Since  
         ![image for ex2](/images/algo_analysis_dominance_ex_2.png)
 
 ## Important data structures concepts:
