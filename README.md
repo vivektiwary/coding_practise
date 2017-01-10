@@ -3,7 +3,7 @@
 
 
 ## Important concepts:
-* Segment Trees:
+* **Segment Trees**:
 > Segment trees are data structures which are particularly helpful in range query and 
 > range update.
 > The time complexity of building the tree is O(n). As we need to update the value of 
@@ -12,7 +12,7 @@
 > only O(lg n).
 
 
-* Lazy Propagation:
+* **Lazy Propagation**:
 > Lazy propagation refers to a mechanism where we do not update all the nodes in a 
 > given range. Rather than that, we lazily update the parent node of a range and mark
 > its children for `lazy update`.
@@ -117,7 +117,7 @@
 ```
  
 ## Mathematical formulas and proofs
-* Sum of 1 to n  
+* **Sum of 1 to n**
 ![image_for_arithmetic](/images/arithmatic_sequence.png)
   
 Proof:
@@ -128,21 +128,21 @@ Proof:
 > We should note that each number is (n + 1) and there are n elements. So the sum would be: n * (n + 1).
 > So ![image for arithmetic2](/images/arithmetic_seq_1.png)
   
-* Sum of square of a sequence  
+* **Sum of square of a sequence**  
 ![image for arithmetic2](/images/arithmetic_seq_square.png)
  
 Proof:  
 > We know that  &nbsp; &nbsp; ![image_for_lemma](/images/arithmetic_lemma.png) &nbsp; &nbsp; (can be proved using mathematical induction). So  &nbsp; &nbsp; ![image for first step](/images/arithmetic_sqr_proof_step_1.png) &nbsp; &nbsp; which can be written as &nbsp; &nbsp; ![image for step2](/images/arithmetic_sqr_proof_step_2.png). &nbsp; &nbsp;  
 > By reducing the above equation we will get &nbsp; &nbsp; ![image for arithmetic2](/images/arithmetic_seq_1.png)
  
-* Sum of cubes of a sequence   
+* **Sum of cubes of a sequence**   
 ![image for arithmetic3](/images/arithmetic_seq_cubes.png)
  
 Proof:
 > We can prove this by induction. There is another way of proving this by using [link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
 
 ## Mathematical concepts and Algorithms
-* Finding the number of factors of a given number  
+* **Finding the number of factors of a given number**  
 
 > Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.
   
@@ -154,7 +154,7 @@ Proof:
 > &nbsp; &nbsp; So we can say that the number of  
 > &nbsp; &nbsp; factors would be (1 + 1) * (1 + 1) * (1 + 1) = 8
 
-* Algorithm for calculating polynomial equations:
+* **Algorithm for calculating polynomial equations:**
 > ![image for equation 1](/images/pol_equation.png)
 > 
 > We need to calculate p(x)
