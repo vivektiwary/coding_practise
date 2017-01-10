@@ -3,10 +3,16 @@
 ## Algorithm analysis
 * **Dominance Relation while deciding the asymptotic bound**:
 
-    > We say that f (n) dominates g(n) if &nbsp; &nbsp; ![image for dominance](/images/algo_analysic_dominance_rel.png)  
-    > Let’s see this definition in action. Suppose &nbsp; ![image for fn](/images/algo_analysic_fn.png) &nbsp; and &nbsp; ![image for gn](/images/algo_analysis_gn.png) &nbsp; . Clearly
-      f (n) > g(n) for all n, but it does not dominate since  
-    > ![image for example](/images/algo_analysis_dominance_ex_1.png)
+    > We say that f (n) dominates g(n) if &nbsp; &nbsp; ![image for dominance](/images/algo_analysic_dominance_rel.png)
+    
+    > Let’s see this definition in action. Suppose &nbsp; ![image for fn](/images/algo_analysic_fn.png) &nbsp; and &nbsp; ![image for gn](/images/algo_analysis_gn.png) &nbsp;.  
+     Clearly f (n) > g(n) for all n, but it does not dominate
+      since  
+      ![image for example](/images/algo_analysis_dominance_ex_1.png)  
+      This is to be expected because both functions are in the  
+      class Θ(n 2 ).  
+      What about f (n) = n 3 and g(n) = n 2 ? Since  
+        ![image for ex2](/images/algo_analysis_dominance_ex_2.png)
 
 ## Important data structures concepts:
 * **Segment Trees**:
