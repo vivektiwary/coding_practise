@@ -198,3 +198,27 @@
     > ![image for equation2](/images/pol_equation_1.png)
     > If we go on like that we will have `a[n]` and next one will be
     > `a[n-1]*x`.
+    
+* **Fast Exponentiation algorithm**
+    
+    The simplest algorithm performs n − 1 multiplications, by computing a × a ×
+    . . . × a. However, we can do better by observing that 
+    n = &nbsp; ![image for floor and ceil](/images/floor_and_ceil.png)  
+    If n is even, then &nbsp; ![image for relation](/images/algo_fast_exp1.png) &nbsp;. If n is odd, then &nbsp; ![image for relation](/images/algo_fast_exp2.png)  
+    
+    > In either case, we have halved the size of our exponent
+      at the cost of, at most, two multiplications, so
+      O(lg n) multiplications suffice to compute the final
+      value.
+
+```c++
+    int power(a, n) {
+        if (n == 0) return 1;
+        x = power(a, floor(n/2))
+        if (n % 2 == 0) // n is even
+            return x * x
+        else
+            return a * (x * x)
+    }
+```      
+      
