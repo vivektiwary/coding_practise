@@ -120,69 +120,69 @@
 * **Sum of 1 to n**
 ![image_for_arithmetic](/images/arithmatic_sequence.png)
   
-Proof:
-> Suppose S(n) = 1 + 2 + . . . + n     &nbsp; &nbsp; &nbsp; &nbsp; (eq 1)  
-> We can also say that, S(n) = n + n-1 + n-2 + . . . + 1 &nbsp; &nbsp; &nbsp; &nbsp; (eq 2)   
-> Adding eq 1 and eq 2, we have,
-> 2 S(n) = (n + 1) + (n + 1) + . . . (n + 1)  
-> We should note that each number is (n + 1) and there are n elements. So the sum would be: n * (n + 1).
-> So ![image for arithmetic2](/images/arithmetic_seq_1.png)
+    Proof:
+    > Suppose S(n) = 1 + 2 + . . . + n     &nbsp; &nbsp; &nbsp; &nbsp; (eq 1)  
+    > We can also say that, S(n) = n + n-1 + n-2 + . . . + 1 &nbsp; &nbsp; &nbsp; &nbsp; (eq 2)   
+    > Adding eq 1 and eq 2, we have,
+    > 2 S(n) = (n + 1) + (n + 1) + . . . (n + 1)  
+    > We should note that each number is (n + 1) and there are n elements. So the sum would be: n * (n + 1).
+    > So ![image for arithmetic2](/images/arithmetic_seq_1.png)
   
 * **Sum of square of a sequence**  
 ![image for arithmetic2](/images/arithmetic_seq_square.png)
  
-Proof:  
-> We know that  &nbsp; &nbsp; ![image_for_lemma](/images/arithmetic_lemma.png) &nbsp; &nbsp; (can be proved using mathematical induction). So  &nbsp; &nbsp; ![image for first step](/images/arithmetic_sqr_proof_step_1.png) &nbsp; &nbsp; which can be written as &nbsp; &nbsp; ![image for step2](/images/arithmetic_sqr_proof_step_2.png). &nbsp; &nbsp;  
-> By reducing the above equation we will get &nbsp; &nbsp; ![image for arithmetic2](/images/arithmetic_seq_1.png)
+    Proof:  
+    > We know that  &nbsp; &nbsp; ![image_for_lemma](/images/arithmetic_lemma.png) &nbsp; &nbsp; (can be proved using mathematical induction). So  &nbsp; &nbsp; ![image for first step](/images/arithmetic_sqr_proof_step_1.png) &nbsp; &nbsp; which can be written as &nbsp; &nbsp; ![image for step2](/images/arithmetic_sqr_proof_step_2.png). &nbsp; &nbsp;  
+    > By reducing the above equation we will get &nbsp; &nbsp; ![image for arithmetic2](/images/arithmetic_seq_1.png)
  
 * **Sum of cubes of a sequence**   
 ![image for arithmetic3](/images/arithmetic_seq_cubes.png)
  
-Proof:
-> We can prove this by induction. There is another way of proving this by using [link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
+    Proof:
+    > We can prove this by induction. There is another way of proving this by using [link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
 
 ## Mathematical concepts and Algorithms
 * **Finding the number of factors of a given number**  
 
-> Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.
-  
-> Ex:  
-> &nbsp; &nbsp; Let the number be 105.  
-> &nbsp; &nbsp; The factors of this number are 1, 3, 5, 7, 15, 21, 35, 105. Which is 8.  
-> &nbsp; &nbsp; Now consider the prime factors of 105.  
-> &nbsp; &nbsp; They are 3, 5, 7. So the number of repetition for each of them is 1.  
-> &nbsp; &nbsp; So we can say that the number of  
-> &nbsp; &nbsp; factors would be (1 + 1) * (1 + 1) * (1 + 1) = 8
+    > Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.
+      
+    > Ex:  
+    > &nbsp; &nbsp; Let the number be 105.  
+    > &nbsp; &nbsp; The factors of this number are 1, 3, 5, 7, 15, 21, 35, 105. Which is 8.  
+    > &nbsp; &nbsp; Now consider the prime factors of 105.  
+    > &nbsp; &nbsp; They are 3, 5, 7. So the number of repetition for each of them is 1.  
+    > &nbsp; &nbsp; So we can say that the number of  
+    > &nbsp; &nbsp; factors would be (1 + 1) * (1 + 1) * (1 + 1) = 8
 
 * **Algorithm for calculating polynomial equations:**  
 
-> ![image for equation 1](/images/pol_equation.png)
-> 
-> We need to calculate p(x)
+    > ![image for equation 1](/images/pol_equation.png)
+    > 
+    > We need to calculate p(x)
 
-One naive algorithm or brute force algorithm would be:
-
-```c++
- int p = a[0] ;
- int xpower = 1;
- for (int i = 1; i <= n; ++i) {
-    xpower = x ∗ xpower;
-    p = p + a i ∗ xpower;
- }
-```
-> In this algorithm we have to perform 2*n multiplications and n additions. Which is not that good.
-
-> One better algorithm is `Horner's Method`:
-
-```c++
-int res = 0;
-for (int i = n; i <= 0; --i) {
-    res = (res * x) + a[i];
-}
-return res;
-```
-> This algorithm assumes the fact that,
-> ![image for equation1](/images/pol_equation.png) can be written as
-> ![image for equation2](/images/pol_equation_1.png)
-> If we go on like that we will have `a[n]` and next one will be
-> `a[n-1]*x`.
+    One naive algorithm or brute force algorithm would be:
+    
+    ```c++
+     int p = a[0] ;
+     int xpower = 1;
+     for (int i = 1; i <= n; ++i) {
+        xpower = x ∗ xpower;
+        p = p + a i ∗ xpower;
+     }
+    ```
+    > In this algorithm we have to perform 2*n multiplications and n additions. Which is not that good.
+    
+    > One better algorithm is `Horner's Method`:
+    
+    ```c++
+    int res = 0;
+    for (int i = n; i <= 0; --i) {
+        res = (res * x) + a[i];
+    }
+    return res;
+    ```
+    > This algorithm assumes the fact that,
+    > ![image for equation1](/images/pol_equation.png) can be written as
+    > ![image for equation2](/images/pol_equation_1.png)
+    > If we go on like that we will have `a[n]` and next one will be
+    > `a[n-1]*x`.
