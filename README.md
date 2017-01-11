@@ -419,9 +419,45 @@ Solution:
      here then we need to check from 17 - 30 floors for result.
      which is equal to 14 plus we have tested it for 2 floors,
      so 14 + 2 = 16.
-      
 
+2. You are given 10 bags of gold coins. Nine bags contain
+   coins that each weigh 10 grams. One bag contains all false
+   coins that weigh one gram less. You must identify this bag
+   in just one weighing. You have a digital balance that
+   reports the weight of what is placed on it.
+   
+   > Note: We only have to weight it one time and there are no
+     balance kind of arrangement.
+   >
+   >
+   > If a balance was given it would have taken only 2 steps
+     but that will also make the question trivial.  
+     So as the difference between the false coin and true
+     coin is only 1.   
+     So if we take 1 coin from bag 1 and put that in a new 
+     bag E.  
+     2 coin from bag 2 and put that in the bag E.  
+   >
+   > .
+   > .
+   >
+   > 10 coin from bag 10 and put that in the bag E.  
+     We expect the sum to be 10*(1 + 2 + . . + 10) = 550  
+     If we deduct the sum we will get from 550 we will 
+     have the bag number as the difference is only 1.
+   >
+   >
+   > Suppose another case where the false bag has weight = 8gm
+     then the difference would be `2`. Then whatever the
+     difference comes we need to divide it by 2 to get the
+     result.
+   >
+   >
+   > In a more general case if the difference is `n` and `n < true weight` then we need to divide the difference by `n`.
+    
+  
+   
 
 
 ### Disclaimer:
-Some of the things which are listed above are taken from various sources including `The algorithm design manual by Skiena`. I do not claim ownership of entire content which has been posted here. This readme is a reference which I am using while studying different things.
+Some of the things which are listed above are taken from various sources including but not limited to `The algorithm design manual by Skiena`. I do not claim ownership of entire content which has been posted here. This readme is a reference which I am using while studying different things.
