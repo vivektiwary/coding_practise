@@ -367,6 +367,58 @@ Solution:
             return a * (x * x)
     }
 ```      
+
+
+### Puzzles
+1. You have a 100-story building and a couple of marbles. You
+   must identify the lowest floor for which a marble will
+   break if you drop it from this floor. How fast can you find
+   this floor if you are given an infinite supply of marbles?
+   What if you have only two marbles?
+   
+   > There are 2 cases in this problem.   
+     Case1:  
+     In this case we have infinite number of marbles. So we use
+     binary search to find the solution. So first we drop the
+     marble from 50th floor, there are two possibility either
+     it will break or it does not. If it does not break at 50th
+     floor then we know that it might break in floor 51 - floor 100.
+     If it breaks at floor 50 we go on finding the solution in 
+     floor 1 - floor 49. So each time we are reducing our
+     problem space into half. So it will take `lg 100 = 6.78`,
+     which is roughly 7, steps to find out the minimum floor
+     from where the marble will break.  
+   >
+   >
+   > Case2:  
+     In this case we only have 2 marbles. So we can not employ
+     the binary search strategy here because if we drop the
+     marble from 50th floor and it breaks, then we need to
+     start from floor 1 to floor 49 for finding out the
+     minimum floor. So in the worst case it would be 50. This
+     is not good.
+   >
+   >
+   > What we can think next is, we will start from floor 10 and
+     move 10 floor at each iteration. So in the worst case, if
+     the marble breaks at 100th floor then we need to check 
+     only floor 91 - floor 99 to find out the minimum floor.
+     So it will take 19 in the worst case. It's an improvement
+     from the previous algorithm.
+   >
+   >
+   > For finding an optimal solution we can start from floor
+     `n`. If it breaks then we have to search only `(n-1)`
+     floor to get the result. If it does not break then
+     we should NOT go `n` steps above, rather we should step
+     up by `(n-1)` floors because we have to keep the worst 
+     case step to be `n` in all the cases.  
+     For example if n = 16, if it breaks at 16, then we need to
+     check 1 to 15 for minimum floor. So worst case is 16.
+     Now if we test for 31(which is n-1 up 16) and it breaks
+     here then we need to check from 17 - 30 floors for result.
+     which is equal to 14 plus we have tested it for 2 floors,
+     so 14 + 2 = 16.
       
 
 
