@@ -1,5 +1,80 @@
 # Practise code from various websites including codechef, hackerearth, hackerrank along with the concepts
 
+## System Design Problems
+Problem:  
+  > We have 1,000 data items to store on 1,000 nodes. Each
+    node can store copies of exactly three different items.
+    Propose a replication scheme to minimize data loss as
+    nodes fail. What is the expected number of data entries
+    that get lost when three random nodes fail?
+    
+Concepts:
+
+* RAID:
+    > RAID (originally redundant array of inexpensive disks,
+     now commonly redundant array of independent disks) is a
+     data storage virtualization technology that combines
+     multiple physical disk drive components into a single
+     logical unit for the purposes of data redundancy,
+     performance improvement, or both.
+     
+    > Data is distributed across the drives in one of several
+      ways, referred to as RAID levels, depending on the
+      required level of redundancy and performance. The
+      different schemes, or data distribution layouts, are
+      named by the word RAID followed by a number, for example
+      RAID 0 or RAID 1. Each schema, or RAID level, provides a
+      different balance among the key goals: reliability,
+      availability, performance, and capacity. RAID levels
+      greater than RAID 0 provide protection against
+      unrecoverable sector read errors, as well as against
+      failures of whole physical drives.  
+      More about RAID and fault tolerance: [link](https://www.colocationamerica.com/blog/what-is-raid-fault-tolerance)
+      
+    > RAID 0 provides only stripping, meaning the data blocks
+      are stripped and stored in distributed drives so that we
+      can have simultaneous read and write. (very efficient)
+      But it does not provide fault tolerance, meaning if one
+      disk fails, you will loose all the data.
+    
+    > RAID 1 is a slightly better version of `RAID 0` in terms
+      of fault tolerance as it stores the mirror of one drive 
+      to the another one. It is good for read but not so good 
+      for write as we need to perform 2 writes every time we
+      right some data. There is a risk of data loss if both 
+      drive fails or if 2nd fails while replacing the 1st.
+      
+    > RAID 5 is better in terms of fault tolerance as well as 
+      performance. It stores the stripped data across various
+      disks along with distributed parity. Parity is nothing 
+      but the `XOR` of all the data.
+     
+    > Source: Wikipedia and [www.colocationamerica.com](www.colocationamerica.com)
+
+* How parity helps in data loss protection?
+
+    > Suppose we have 3 data bits  
+      101, 001, 100
+      We strip these bits and store them on different drives.
+      Along with that we also store their parity on a drive.
+      Parity is nothing but `XOR` of these data. So when we do 
+      101 XOR 001 we will get `100` and for 100 XOR 100 we will
+      get `000`. Which is the parity bit.  
+      Now suppose we lost the `101` then we will do  
+      `001 XOR 100 XOR 000 = 101`. So we get our data back.
+
+Solution:
+  > In the problem it has been mentioned that we can store the
+    duplicate data of exactly three nodes. We can store the 
+    data for n+1, n+2 and n+3 in n. So if we follow this
+    setup we will loose 1 record if we loose three consecutive 
+    drives. Given below a hypothetical case of 4 data and 4
+    nodes in which we will not loose any data even if 3 drive
+    goes blank.  
+    ![image for raid fault tolerance](/images/raid_system_design.jpg)
+    
+
+
 ## Algorithm analysis
 * **Dominance Relation while deciding the asymptotic bound**:
 
@@ -293,3 +368,8 @@
     }
 ```      
       
+
+
+
+### Disclaimer:
+Some of the things which are listed above are taken from various sources including `The algorithm design manual by Skiena`. I do not claim ownership of entire content which has been posted here. This readme is a reference which I am using while studying different things.
