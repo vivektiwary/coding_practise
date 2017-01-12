@@ -455,7 +455,39 @@ Solution:
    >
    > In a more general case if the difference is `n` and `n < true weight` then we need to divide the difference by `n`.
     
-  
+3. Suppose we have N companies, and we want to eventually 
+   merge them into one big company. How many ways are there to
+   merge?
+       
+   > Initial Thinking:  
+   > We need to find the number of subset of set of 1-n numbers
+     and subtract (n + 1) from it.  
+     Why this thinking?  
+     If we take three companies {1, 2, 3}, we can merge them  
+     (1+2) + 3  
+     (1+3) + 2  
+     1 + (2+3)  
+     (1 + 2 + 3)  
+     So 4 ways and no of subset for this set will be 2^3 which
+     is 8, but this subset will contain {1}, {2}, {3}, {} also.
+     Hence subtract 4 from 8, 4 = (3 + 1) = (n + 1).  WRONG!
+   >
+   >
+   > Right Solution:  
+     If we assume that 2 companies can be merged in a single
+     step and we have to choose 2 companies out of `n` for 
+     merging, which is `n C 2`. Now if we merge this company
+     we will be left with `n - 1` companies to merge. How?    
+     ex: {a, b, c}  
+     if we choose a & b and merge them, then we will have  
+     {ab, c} left to merge which is `n - 1`.
+     So then we will choose 2 companies out of `n - 1`
+     companies in `(n-1) C 2` ways, we will continue this
+     process till we are left with only 2 companies, which
+     we can merge in `2 C 2` ways.  
+     So no of ways can be written as &nbsp; 
+     ![image for merge](/images/merge_ways.png).
+   
    
 
 
