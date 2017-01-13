@@ -267,6 +267,21 @@ Solution:
     Proof:
     > We can prove this by induction. There is another way of proving this by using [link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
 
+* **Sum of Geometric Progression**  
+![image for geometric summation](/images/geometric_summation.png)
+
+    Proof:
+    > We know that &nbsp; &nbsp; ![image for a_n](/images/a_n_minux_1.png) &nbsp; &nbsp;  
+      From this we can deduce that &nbsp; &nbsp; ![image for n_n_by_n_minus_1](/images/a_n_minus_1_by_n_minus_1.png) &nbsp; &nbsp;  
+      In GP we have &nbsp; &nbsp; ![image for gp](/images/geometric_progression.png) &nbsp; &nbsp;  
+      which can also be written as &nbsp; &nbsp; ![reverse gp](/images/reverse_geometric_progression.png) &nbsp; &nbsp; or &nbsp; &nbsp; ![gp reduced](/images/gp_reduced.png)
+    >
+    >  So &nbsp; &nbsp; ![gp reduced 2](/images/gp_reduced_2.png).
+    >
+    >  Hence &nbsp; &nbsp; ![gp sum final](/images/gp_sum_final.png).
+    
+
+
 * **Logarithm and its use**
 
     The `Harmonic numbers` arise as a special case of
