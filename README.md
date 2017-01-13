@@ -1,6 +1,16 @@
 # Practise code from various websites including codechef, hackerearth, hackerrank along with the concepts
 
-## System Design Problems
+
+## <a name='table_of_contents'></a>Table of contents:
+1. [System Design Problems](#system_design_problem)
+2. [Algorithm Analysis](#algorithm_analysis)
+3. [Data Structures and Concepts](#important_data_structures_and_concepts)
+4. [Mathematical formulas and their Proofs](#math_formulas_and_proofs)
+5. [Mathematical concepts and Algorithms](#mathematical_concepts_and_algorithm)
+6. [Puzzles](#puzzles)
+
+
+## <a name='system_design_problem'></a> System Design Problems
 Problem:  
   > We have 1,000 data items to store on 1,000 nodes. Each
     node can store copies of exactly three different items.
@@ -73,9 +83,9 @@ Solution:
     goes blank.  
     ![image for raid fault tolerance](/images/raid_system_design.jpg)
     
+[Back to Table Of contents](#table_of_contents)
 
-
-## Algorithm analysis
+## <a name='algorithm_analysis'></a>Algorithm analysis
 * **Dominance Relation while deciding the asymptotic bound**:
 
     > We say that f (n) dominates g(n) if &nbsp; &nbsp; ![image for dominance](/images/algo_analysic_dominance_rel.png)
@@ -103,31 +113,38 @@ Solution:
     This would be satisfied for any 0 < c <= 2.  
     Together the big oh and omega bounding imply &nbsp; ![big on example 1](/images/big_oh_ex_1.png).
 
+[Back to Table Of contents](#table_of_contents)
 
-## Important data structures concepts:
+## <a name='important_data_structures_and_concepts'></a>Important data structures concepts:
 * **Segment Trees**:
-> Segment trees are data structures which are particularly helpful in range query and 
-> range update.
-> The time complexity of building the tree is O(n). As we need to update the value of 
-> each node and their are (2*n -1) nodes in the tree.
-> The point which should be noted is that the time complexity of query and update is
-> only O(lg n).
+    > Segment trees are data structures which are particularly
+     helpful in range query and range update.
+     The time complexity of building the tree is O(n). As we
+     need to update the value of each node and their are
+     (2*n-1) nodes in the tree. The point which should be
+     noted is that the time complexity of query and update is
+     only O(lg n).
 
 
 * **Lazy Propagation**:
-> Lazy propagation refers to a mechanism where we do not update all the nodes in a 
-> given range. Rather than that, we lazily update the parent node of a range and mark
-> its children for `lazy update`.
+    > Lazy propagation refers to a mechanism where we do not
+      update all the nodes in a given range. Rather than that,
+      we lazily update the parent node of a range and mark its
+      children for `lazy update`.
+    >
+    >
+    > For example: (Please refer to the image given below to understand better.) Suppose you have to update all the nodes
+      in range [0:2], (this symbol means, both are included)
+      We don't have to update all the nodes in that given
+      range if we use lazy propagation. We only have to update
+      node representing (0:2) (which is node = 1 in below
+      image) and mark its immediate children lazy.
+    >
+    > * We need an auxilary space for storing the nodes which
+      have been marked lazy.
+    > * We need to update the node values only when searching.
 
-> For example: (Please refer to the image given below to understand better.)
-> Suppose you have to update all the nodes in range [0:2], (this symbol means, both are included)
-> We don't have to update all the nodes in that given range if we use lazy propagation. We only
-> have to update node representing (0:2) (which is node = 1 in below image) and mark it immediate children lazy.
-> 	* We need an auxilary space for storing the nodes which have been marked lazy.
->   * We need to update the node values only when searching.
-
-![Image for segment tree]
-(/images/segment_tree.jpg)
+![Image for segment tree](/images/segment_tree.jpg)
 
 * Code for building a `segment tree`:
 ```c++
@@ -217,25 +234,32 @@ Solution:
 		return p1 + p2;
 	}
 ```
+[Back to Table Of contents](#table_of_contents)
  
-## Mathematical formulas and proofs
+## <a name='math_formulas_and_proofs'></a> Mathematical formulas and proofs
 * **Sum of 1 to n**
 ![image_for_arithmetic](/images/arithmatic_sequence.png)
   
     Proof:
-    > Suppose S(n) = 1 + 2 + . . . + n     &nbsp; &nbsp; &nbsp; &nbsp; (eq 1)  
-    > We can also say that, S(n) = n + n-1 + n-2 + . . . + 1 &nbsp; &nbsp; &nbsp; &nbsp; (eq 2)   
-    > Adding eq 1 and eq 2, we have,
-    > 2 S(n) = (n + 1) + (n + 1) + . . . (n + 1)  
-    > We should note that each number is (n + 1) and there are n elements. So the sum would be: n * (n + 1).
-    > So ![image for arithmetic2](/images/arithmetic_seq_1.png)
+    > Suppose S(n) = 1 + 2 + . . . + n     &nbsp; &nbsp; &nbsp; &nbsp; (eq 1) 
+    >
+    >
+    > We can also say that, S(n) = n + n-1 + n-2 + . . . + 1
+     &nbsp; &nbsp; &nbsp; &nbsp; (eq 2)
+    >
+    >
+    > Adding eq 1 and eq 2, we have,  
+      2 S(n) = (n + 1) + (n + 1) + . . . (n + 1)  
+      We should note that each number is (n + 1) and there are
+      n elements. So the sum would be: n * (n + 1).
+      So ![image for arithmetic2](/images/arithmetic_seq_1.png)
   
 * **Sum of square of a sequence**  
 ![image for arithmetic2](/images/arithmetic_seq_square.png)
  
     Proof:  
     > We know that  &nbsp; &nbsp; ![image_for_lemma](/images/arithmetic_lemma.png) &nbsp; &nbsp; (can be proved using mathematical induction). So  &nbsp; &nbsp; ![image for first step](/images/arithmetic_sqr_proof_step_1.png) &nbsp; &nbsp; which can be written as &nbsp; &nbsp; ![image for step2](/images/arithmetic_sqr_proof_step_2.png). &nbsp; &nbsp;  
-    > By reducing the above equation we will get &nbsp; &nbsp; ![image for arithmetic2](/images/arithmetic_seq_1.png)
+     By reducing the above equation we will get &nbsp; &nbsp; ![image for arithmetic2](/images/arithmetic_seq_1.png)
  
 * **Sum of cubes of a sequence**   
 ![image for arithmetic3](/images/arithmetic_seq_cubes.png)
@@ -300,7 +324,9 @@ Solution:
     comes from its logarithmic complexity, not the base of
     the log. 
 
-## Mathematical concepts and Algorithms
+[Back to Table Of contents](#table_of_contents)
+
+## <a name='mathematical_concepts_and_algorithm'></a>Mathematical concepts and Algorithms
 * **Finding the number of factors of a given number**  
     
     > Theorem: The number of factors of a given number can be expressed as (x + 1) * (y + 1) * (z + 1) where x, y, z are the number of repetition of the prime factors of that number.  
@@ -368,8 +394,9 @@ Solution:
     }
 ```      
 
+[Back to Table Of contents](#table_of_contents)
 
-### Puzzles
+### <a name='puzzles'></a>Puzzles
 1. You have a 100-story building and a couple of marbles. You
    must identify the lowest floor for which a marble will
    break if you drop it from this floor. How fast can you find
@@ -488,7 +515,7 @@ Solution:
      So no of ways can be written as &nbsp; 
      ![image for merge](/images/merge_ways.png).
    
-   
+[Back to Table Of contents](#table_of_contents)
 
 
 ### Disclaimer:
