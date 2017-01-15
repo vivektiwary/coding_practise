@@ -4,10 +4,11 @@
 ## <a name='table_of_contents'></a>Table of contents:
 1. [System Design Problems](#system_design_problem)
 2. [Algorithm Analysis](#algorithm_analysis)
-3. [Data Structures and Concepts](#important_data_structures_and_concepts)
-4. [Mathematical formulas and their Proofs](#math_formulas_and_proofs)
-5. [Mathematical concepts and Algorithms](#mathematical_concepts_and_algorithm)
-6. [Puzzles](#puzzles)
+3. [Common Algorithms](#common_algorithms)
+4. [Data Structures and Concepts](#important_data_structures_and_concepts)
+5. [Mathematical formulas and their Proofs](#math_formulas_and_proofs)
+6. [Mathematical concepts and Algorithms](#mathematical_concepts_and_algorithm)
+7. [Puzzles](#puzzles)
 
 
 ## <a name='system_design_problem'></a> System Design Problems
@@ -85,7 +86,7 @@ Solution:
     
 [Back to Table Of contents](#table_of_contents)
 
-## <a name='algorithm_analysis'></a>Algorithm analysis
+## <a name='algorithm_analysis'></a> Algorithm analysis
 * **Dominance Relation while deciding the asymptotic bound**:
 
     > We say that f (n) dominates g(n) if &nbsp; &nbsp; ![image for dominance](/images/algo_analysic_dominance_rel.png)
@@ -113,6 +114,128 @@ Solution:
     This would be satisfied for any 0 < c <= 2.  
     Together the big oh and omega bounding imply &nbsp; ![big on example 1](/images/big_oh_ex_1.png).
 
+[Back to Table Of contents](#table_of_contents)
+
+
+## <a name='common_algorithms'></a> Common Algorithms
+
+* **Brute force string matching**:
+
+    It usually restore to matching substring character by
+    character. The worst case complexity for this algo is
+    O(n).  
+    Algo:  
+    ```c++
+        boolean patternSearch(String S, String pattern) {
+            int stringSize = s.length;
+            int patternSize = p.length;
+            for (int i = 0; i <= (stringSize - patternSize); ++i) {
+                int count = 0;
+                for (int j = 0; j < patternSize; ++j) {
+                    if (S[i + j] == pattern[j]) {
+                        count++;
+                    }
+                    else {
+                        break;
+                    }
+                }
+                if (count == patternSize) {
+                    return True;
+                    break;
+                }
+            }
+        }
+    ```
+
+* **String Matching Algorithm (Rabin Karp)**:
+    > The basis of this algorithm is `hashing`. Instead of
+      character by character search, it uses hash of the 
+      string and substring for comparision. This type of 
+      algorithm is useful in `Plagiarism Detection`.
+    
+    #####Pseudo Code:
+    ```c++
+         function RabinKarp(string s[1..n], string pattern[1..m])
+           hpattern := hash(pattern[1..m]);
+           for i from 1 to n-m+1
+             hs := hash(s[i..i+m-1])
+             if hs = hpattern
+               if s[i..i+m-1] = pattern[1..m]
+                 return i
+           return not found
+    ```
+    Lines 2, 4, and 6 each require O(m) time. However, line 2 is
+    only executed once, and line 6 is only executed if the hash
+    values match, which is unlikely to happen more than a few 
+    times. Line 5 is executed O(n) times, but each comparison
+    only requires constant time, so its impact is O(n). The
+    issue is line 4.  
+    
+    Naively computing the hash value for the substring 
+    s[i+1..i+m] requires `O(m)` time because each character is
+    examined. Since the hash computation is done on each loop,
+    the algorithm with a naïve hash computation requires `O(mn)`
+    time, the same complexity as a straightforward string
+    matching algorithms. For speed, the hash must be computed in
+    `constant time`. The trick is the variable `hs` already
+    contains the previous `hash value` of `s[i-1..i+m-2]`. If
+    that value can be used to compute the next hash value in
+    constant time, then computing successive hash values will be
+    fast.
+      
+    The trick can be exploited using a `rolling hash`. A `rolling
+    hash` is a hash function specially designed to enable this
+    operation. A trivial (but not very good) rolling hash
+    function just `adds the values of each character` in the
+    substring. This rolling hash formula can compute the next
+    hash value from the previous value in constant time:
+    
+        s[i+1..i+m] = s[i..i+m-1] - s[i] + s[i+m]
+        
+    This simple function works, but will result in statement 5
+    being executed more often than other more sophisticated
+    rolling hash function.
+    
+    ##### Hash Functions:
+    
+    The key to the `Rabin–Karp` algorithm's performance is the
+    `efficient computation` of `hash values` of the successive
+    substrings of the text. The `Rabin fingerprint` is a popular
+    and effective `rolling hash` function. The `Rabin
+    fingerprint` treats every substring as a `number in some
+    base`, the base being usually a large `prime`. For example,
+    if the substring is _"hi"_ and the base is 101, the hash
+    value would be 104 × 101^1 + 105 × 101^0 = 10609 (`ASCII` of
+    _'h'_ is 104 and of 'i' is 105).  
+    
+    The essential benefit achieved by using a `rolling hash` 
+    such as the `Rabin fingerprint` is that it is possible to
+    compute the `hash value` of the next substring from the
+    previous one by doing only a `constant number of operations`,
+    independent of the substrings lengths.
+    
+    For example, if we have text "abracadabra" and we are
+    searching for a pattern of length 3, the hash of the first
+    substring, "abr", using 101 as base is:
+        
+        // ASCII a = 97, b = 98, r = 114. 
+        hash("abr") = (97 × 101^2) + (98 × 101^1) + (114 × 101^0) = 999,509
+         
+    We can then compute the hash of the next substring, "bra",
+    from the hash of "abr" by subtracting the number added for
+    the first 'a' of "abr", i.e. 97 × 1012, multiplying by the
+    base and adding for the last a of "bra", i.e. 97 × 1010.
+    Like so:
+        
+        //             base   old hash    old 'a'         new 'a'
+        hash("bra") = [101 × (999,509 - (97 × 101^2))] + (97 × 101^0) = 1,011,309
+    
+    If the substrings in question are long, this algorithm 
+    achieves great savings compared with many other hashing
+    schemes.
+
+    
+    
 [Back to Table Of contents](#table_of_contents)
 
 ## <a name='important_data_structures_and_concepts'></a>Important data structures concepts:
