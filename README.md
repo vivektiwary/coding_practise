@@ -1,6 +1,5 @@
 # Practise code from various websites including codechef, hackerearth, hackerrank along with the concepts
 
-
 ## <a name='table_of_contents'></a>Table of contents:
 1. [System Design Problems](#system_design_problem)
 2. [Algorithm Analysis](#algorithm_analysis)
