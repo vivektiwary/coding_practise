@@ -1,10 +1,10 @@
 # Practise code from various websites including codechef, hackerearth, hackerrank along with the concepts
 
-
 ## <a name='table_of_contents'></a>Table of contents:
 1. [System Design Problems](#system_design_problem)
 2. [Algorithm Analysis](#algorithm_analysis)
 3. [Common Algorithms](#common_algorithms)
+    1. [Finding the Intersection](#finding_the_intersection)
 4. [Data Structures and Concepts](#important_data_structures_and_concepts)
 5. [Mathematical formulas and their Proofs](#math_formulas_and_proofs)
 6. [Mathematical concepts and Algorithms](#mathematical_concepts_and_algorithm)
@@ -153,7 +153,7 @@ Solution:
       string and substring for comparision. This type of 
       algorithm is useful in `Plagiarism Detection`.
     
-    #####Pseudo Code:
+    ##### Pseudo Code:
     ```c++
          function RabinKarp(string s[1..n], string pattern[1..m])
            hpattern := hash(pattern[1..m]);
@@ -164,6 +164,7 @@ Solution:
                  return i
            return not found
     ```
+    
     Lines 2, 4, and 6 each require O(m) time. However, line 2 is
     only executed once, and line 6 is only executed if the hash
     values match, which is unlikely to happen more than a few 
@@ -234,7 +235,22 @@ Solution:
     achieves great savings compared with many other hashing
     schemes.
 
-    
+* <a name='finding_the_intersection'></a> Finding the Intersection
+  
+  > Give an efficient algorithm to determine whether two sets (of size m and n, respectively) are `disjoint`. Analyze the `worst-case` complexity in terms of m and n, considering the case where `m` is `substantially smaller` than `n`.
+  
+  **Solution**:  
+  At least three algorithms come to mind, all of which are variants of sorting and searching:
+  1. **first sort the big set**: The big set can be sorted in `O(n log n)` time. We can now do a binary search with each of the `m` elements in the second, looking to see if it exists in the `big set`. The total time will be `O((n + m) log n)`.
+  
+  2. **first sort the small set**: The small set can be sorted in `O(m log m)` time. We can now do a binary search with each of the `n` elements in the big set, looking to see if it exists in the small one. The total time will be `O((n + m) log m)`.
+  
+  3. **sort both sets**: Observe that once the two sets are sorted, we no longer have to do binary search to detect a common element. We can compare the `smallest elements` of the `two sorted sets`, and discard the smaller one if they are not identical. By repeating this idea recursively on the now smaller sets, we can `test for duplication` in `linear time` after sorting. The total cost is `O(n log n + m log m + n + m)`.
+  
+  So, which of these is the fastest method? Clearly `small-set` sorting trumps `big-set` sorting, since `log m < log n` when `m < n`. Similarly, `(n + m) log m` must be asymptotically `less` than `n log n`, since `n + m < 2n` when `m < n`. Thus, `sorting the small set` is the `best of these options`. Note that this is linear when `m` is constant in size.
+  
+  Note that expected linear time can be achieved by `hashing`. Build a hash table containing the elements of `both sets`, and `verify` that `collisions in the same bucket` are in fact `identical elements`. `In practice, this may be the best solution.`
+  
     
 [Back to Table Of contents](#table_of_contents)
 
