@@ -5,6 +5,7 @@
 2. [Algorithm Analysis](#algorithm_analysis)
 3. [Common Algorithms](#common_algorithms)
     1. [Finding the Intersection](#finding_the_intersection)
+    2. [Heap compare](#heap_compare)
 4. [Data Structures and Concepts](#important_data_structures_and_concepts)
 5. [Mathematical formulas and their Proofs](#math_formulas_and_proofs)
 6. [Mathematical concepts and Algorithms](#mathematical_concepts_and_algorithm)
@@ -251,7 +252,42 @@ Solution:
   
   Note that expected linear time can be achieved by `hashing`. Build a hash table containing the elements of `both sets`, and `verify` that `collisions in the same bucket` are in fact `identical elements`. `In practice, this may be the best solution.`
   
+
+[Back to Table Of contents](#table_of_contents)
+
+  
+* <a name='heap_compare'></a> Heap Compare
+  > Given an array-based heap on `n` elements and `a real` number `x`, efficiently determine whether the `kth` smallest element in the heap is greater than or equal to `x`. Your algorithm should be `O(k)` in the worst-case, independent of the size of the heap. 
+  >
+  >**Hint**: you do not have to find the `kth` smallest element; you need only determine its relationship to x
+ 
+  **Solution**:
+  
+    There are at least two different ideas that lead to correct but inefficient algorithms for this problem:
+    1. Call `extract-min` `k` times, and test whether all of these are less than `x`. This explicitly sorts the `first k` elements and so gives us more information than the desired answer, but it takes `O(k log n)` time to do so.
+    2. The `kth` smallest element cannot be deeper than the `kth` level of the heap, since the `path` from `it` to the `root` must go through `elements of decreasing value`. Thus we can look at all the elements on the `first k levels` of the heap, and `count` how many of them are `less than x`, stopping when we either find `k` of them or `run out` of elements. This is correct, but takes `O(min(n, 2 k ))` time, since the `top k` elements have 2<sup>k</sup> elements.
+  
+    An O(k) solution can look at only k elements smaller than x, plus at most O(k) elements greater than x. Consider the following recursive procedure, called at the root with i = 1 with count = k:
     
+    ```c
+    int heap_compare(priority_queue *q, int i, int count, int x)
+    {
+        if ((count <= 0) || (i > q->n) return(count);
+        if (q->q[i] < x) {
+            count = heap_compare(q, pq_young_child(i), count-1, x);
+            count = heap_compare(q, pq_young_child(i)+1, count, x);
+        }
+    return(count);
+    }
+    ```
+    
+    If the root of the `min-heap` is `≥ x`, then no elements in the `heap` can be `less than x`, as by definition the `root` must be the `smallest element`. This procedure searches the children of all nodes of weight `smaller than x` until either: 
+    1. we have found `k` of them, when it returns `0`, or 
+    2. they are exhausted, when it returns a value `greater than zero`. Thus it will find enough small elements if they exist.
+    
+    But how long does it take? The only nodes whose children we look at are those `< x`, and at most `k` of these in total. Each have at most visited `two children`, so we visit at most `3k` nodes, for a total time of `O(k)`.
+    
+ 
 [Back to Table Of contents](#table_of_contents)
 
 ## <a name='important_data_structures_and_concepts'></a>Important data structures concepts:
