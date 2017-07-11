@@ -124,7 +124,7 @@ Solution:
 
     It usually restore to matching substring character by
     character. The worst case complexity for this algo is
-    O(n).  
+    O(n<sup>2</sup>).  
     Algo:  
     ```c++
         boolean patternSearch(String S, String pattern) {
@@ -192,8 +192,13 @@ Solution:
     substring. This rolling hash formula can compute the next
     hash value from the previous value in constant time:
     
-        s[i+1..i+m] = s[i..i+m-1] - s[i] + s[i+m]
+    >s[i+1..i+m] = s[i..i+m-1] - s[i] + s[i+m]
         
+    **Example**:
+    > Lets suppose the string is 'abcd' and pattern is 'bcd', so
+    for initial loop, i = 1, m = 3, so
+    s[1..4] = s[1..3] - s[1] + s[4]
+    
     This simple function works, but will result in statement 5
     being executed more often than other more sophisticated
     rolling hash function.
@@ -207,7 +212,7 @@ Solution:
     fingerprint` treats every substring as a `number in some
     base`, the base being usually a large `prime`. For example,
     if the substring is _"hi"_ and the base is 101, the hash
-    value would be 104 × 101^1 + 105 × 101^0 = 10609 (`ASCII` of
+    value would be 104 × 101<sup>1</sup> + 105 × 101<sup>0</sup> = 10609 (`ASCII` of
     _'h'_ is 104 and of 'i' is 105).  
     
     The essential benefit achieved by using a `rolling hash` 
@@ -220,17 +225,19 @@ Solution:
     searching for a pattern of length 3, the hash of the first
     substring, "abr", using 101 as base is:
         
-        // ASCII a = 97, b = 98, r = 114. 
-        hash("abr") = (97 × 101^2) + (98 × 101^1) + (114 × 101^0) = 999,509
+    >// ASCII a = 97, b = 98, r = 114.
+    >
+    >hash("abr") = (97 × 101<sup>2</sup>) + (98 × 101<sup>1</sup>) + (114 × 101^0) = 999,509
          
     We can then compute the hash of the next substring, "bra",
     from the hash of "abr" by subtracting the number added for
-    the first 'a' of "abr", i.e. 97 × 1012, multiplying by the
-    base and adding for the last a of "bra", i.e. 97 × 1010.
+    the first 'a' of "abr", i.e. 97 × 101<sup>2</sup>, multiplying by the
+    base and adding for the last a of "bra", i.e. 97 × 101<sup>0</sup>.
     Like so:
         
-        //             base   old hash    old 'a'         new 'a'
-        hash("bra") = [101 × (999,509 - (97 × 101^2))] + (97 × 101^0) = 1,011,309
+    >// base old hash old 'a' new 'a'
+    >
+    >hash("bra") = [101 × (999,509 - (97 × 101<sup>2</sup>))] + (97 × 101<sup>0</sup>) = 1,011,309
     
     If the substrings in question are long, this algorithm 
     achieves great savings compared with many other hashing
