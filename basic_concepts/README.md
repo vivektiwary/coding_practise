@@ -1,7 +1,11 @@
 # Basic concepts related to programming
 
 ## <a name='table_of_contents'></a>Table of contents:
-1. [Sorting and Searching](#sorting_and_searching)
+1. [Common Data-structures](#common_data_structures)
+    1. [Arrays](#arrays)
+    2. [Recursive Objects](#recursive_objects)
+    3. [Dictionaries](#dictionaries)
+2. [Sorting and Searching](#sorting_and_searching)
     1. [Application of Sorting](#application_of_sorting)
     2. [Order of Sorting](#order_of_sorting)
     3. [Heapsort: Fast Sorting via Data Structures](#heap_sort)
@@ -15,6 +19,111 @@
 5. [Mathematical formulas and their Proofs](#math_formulas_and_proofs)
 6. [Mathematical concepts and Algorithms](#mathematical_concepts_and_algorithm)
 7. [Puzzles](#puzzles)
+
+
+## <a name='common_data_structures'></a> Common Data Structures
+
+- Contiguous vs. Linked Data Structures:
+  - Data structures can be neatly classified as either contiguous or linked, depending
+upon whether they are based on arrays or pointers:
+    - `Contiguously-allocated` structures are composed of single slabs of 
+    memory, and include arrays, matrices, heaps, and hash tables.
+    
+    - `Linked data structures` are composed of distinct chunks of memory 
+    bound together by `pointers`, and include lists, trees, and 
+    graph adjacency lists.
+
+
+### <a name='arrays'></a> Arrays:
+
+Advantages of contiguously-allocated arrays include:
+- `Constant-time access given the index` – Because the index of each element
+maps directly to a particular memory address, we can access arbitrary data
+items instantly provided we know the index.
+
+- `Space efficiency` – Arrays consist purely of data, so no space is wasted with
+links or other formatting information. Further, `end-of-record` information is
+not needed because arrays are built from `fixed-size` records.
+
+- `Memory locality` – A common programming idiom involves iterating through
+all the elements of a data structure. Arrays are good for this because they
+exhibit excellent `memory locality`. `Physical continuity` between `successive data`
+accesses helps exploit the `high-speed cache memory` on modern computer
+architectures.
+
+- Downside: As size is fixed, it can't be adjusted in the middle of
+the program.
+
+  - Actually, we can efficiently enlarge arrays as we need them, through the miracle
+  of `dynamic arrays`. Suppose we start with an array of size 1, and double its size from
+  `m` to `2m` each time we run out of space. This doubling process involves allocating a
+  new contiguous array of size `2m`, copying the contents of the old array to the lower
+  half of the new one, and returning the space used by the old array to the storage
+  allocation system.
+
+  - The apparent waste in this procedure involves the `recopying of the old contents`
+  on each expansion. How many times might an element have to be recopied after a
+  total of `n` insertions?
+
+  - Well, the first inserted element will have been recopied when
+  the array expands after the first, second, fourth, eighth, . . . insertions. It will take
+  log<sub>2</sub> n doublings until the array gets to have `n` positions.
+
+  - However, most elements do not suffer much upheaval. Indeed, the `(n/2 + 1)st` 
+  through `nth` elements will move at most once and might never 
+  have to move at all.
+
+  - If `half the elements` move `once`, a `quarter of the elements` `twice`, and so on, the
+  total number of movements `M` is given by
+  ![dynamic array equation](../images/dynamic_array_equation.png)
+  
+  - Thus, each of the `n` elements move only `two times` on average, and the total work
+  of managing the `dynamic array` is the same `O(n)` as it would have been if a single
+  array of sufficient size had been allocated in advance!
+  
+  - The primary thing lost using dynamic arrays is the `guarantee` that `each array
+  access` takes `constant time` in the `worst case`. Now all the queries will be fast, 
+  except for those relatively few queries `triggering array doubling`. What we get 
+  instead is a `promise` that the `nth` array access will be completed quickly enough 
+  that the `total effort` expended so far will still be `O(n)`. Such `amortized guarantees` 
+  arise frequently in the analysis of data structures.
+
+
+### <a name='recursive_objects'></a> Recursive objects
+- `Lists` – Chopping the first element off a linked list leaves a `smaller linked list`.
+This same argument works for `strings`, since removing characters from string
+leaves a string. Lists are `recursive objects`.
+
+- `Arrays` – Splitting the first `k` elements off of an `n` element array gives two
+smaller arrays, of size `k` and `n − k`, respectively. Arrays are `recursive objects`.
+
+
+### <a name='dictionaries'></a> Dictionaries
+
+The `dictionary` data type permits access to data items by content. 
+You stick an item into a dictionary so you can find it when you 
+need it.
+
+The primary operations of dictionary support are:
+- `Search(D,k)` – Given a search key `k`, return a pointer to the element in 
+dictionary `D` whose key value is `k`, if one exists.
+
+- `Insert(D,x)` – Given a data item `x`, add it to the set in the dictionary `D`.
+
+- `Delete(D,x)` – Given a pointer to a given data item `x` in the dictionary `D`,
+  remove it from `D`.
+
+Certain dictionary data structures also efficiently support other useful 
+operations:
+
+- `Max(D)` or `Min(D)` – Retrieve the item with the `largest` (or `smallest`) key 
+from `D`. This enables the dictionary to serve as a `priority queue`.
+
+- `Predecessor(D,k)` or `Successor(D,k)` – Retrieve the item from `D` whose key is
+immediately before (or after) `k` in sorted order. These enable us to iterate
+through the elements of the data structure.
+
+
 
 
 ## <a name='sorting_and_searching'></a> Sorting and Searching
@@ -70,7 +179,7 @@ We start with `data structure` design, because one of the most `dramatic algorit
         Return(Sort)
 ```
 
-A C language implementation of `selection sort` appeared back in Section 2.5.1(page 41). There we `partitioned` the input array into `sorted` and `unsorted` regions. To find the `smallest item`, we performed a `linear sweep` through the `unsorted portion` of the array.
+A `C` language implementation of `selection sort` appeared back in Section 2.5.1(page 41). There we `partitioned` the input array into `sorted` and `unsorted` regions. To find the `smallest item`, we performed a `linear sweep` through the `unsorted portion` of the array.
 
 The `smallest item` is then `swapped` with the `i`<sup>th</sup> item in the array before moving on to the next iteration. `Selection sort` performs `n` iterations, where the average iteration takes `n/2` steps, for a total of O(n<sup>2</sup>) time.  
 But what if we improve the `data structure`? It takes `O(1)` time to remove a particular item from an `unsorted array` once it has been located, but `O(n)` time to find the `smallest item`. These are exactly the operations supported by `priority queues`.  
@@ -87,7 +196,7 @@ Power in any hierarchically-structured organization is reflected by a `tree`, wh
 
 In this spirit, a `heap-labeled tree` is defined to be a `binary tree` such that the `key labeling` of each `node` `dominates` the `key labeling` of each of its `children`. In a `min-heap`, a node `dominates` its `children` by containing a `smaller key` than they do, while in a `max-heap` `parent nodes` dominate by being `bigger`.
 
-![image_for_min_heap](/images/binary-heap.png)
+![image_for_min_heap](../images/binary-heap.png)
 
 The above figure presents a min-heap ordered tree of red-letter years in American history (kudos to you if you can recall what happened each year).
 
@@ -124,7 +233,7 @@ So, we can store any binary tree in an array without pointers. What is the catch
 
 Space efficiency thus demands that we not allow holes in our tree—i.e., that each level be packed as much as it can be. If so, only the last level may be incomplete. By packing the elements of the last level as far to the left as possible, we can represent an `n-key` tree using exactly `n` elements of the array. If we did not enforce these structural constraints, we might need an array of size 2<sup>n</sup> to store the same elements. Since all but the last level is always filled, the height `h` of an `n` element heap is logarithmic because:
 
-![image_for_heap_height_summation](/images/heap_height_summation.png)
+![image_for_heap_height_summation](../images/heap_height_summation.png)
 
 so `h = floor(lg n)`.  
 This implicit representation of binary trees saves memory, but is less flexible than using pointers. We cannot store arbitrary tree topologies without wasting large amounts of space. We cannot move subtrees around by just changing a single pointer, only by explicitly moving each of the elements in the subtree. This loss of flexibility explains why we cannot use this idea to represent `binary search trees`, but it works just fine for `heaps`.
@@ -259,7 +368,7 @@ Multiplying the number of calls to `bubble down` `(n)` times an upper bound on t
 
 But note that it is indeed an `upper bound`, because only the last insertion will actually take 	`lg n` steps. Recall that `bubble down` takes time proportional to the `height of the heaps` it is merging. Most of these heaps are extremely small. In a full binary tree on n nodes, there are n/2 nodes that are leaves (i.e. , height 0), n/4 nodes that are height 1, n/8 nodes that are height 2, and so on. In general, there are at most `ceil`(n/2<sup>h+1</sup>) nodes of height `h`, so the cost of building a heap is:
 
-![heap_building_cost](/images/heap_building_cost.png)
+![heap_building_cost](../images/heap_building_cost.png)
 
 Since this sum is not quite a `geometric series`, we can’t apply the usual identity to get the sum, but rest assured that the puny contribution of the numerator (h) is crushed by the denominator (2<sup>h</sup>). The series quickly `converges` to `linear`.
 
