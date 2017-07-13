@@ -83,37 +83,37 @@ Solution:
     drives. Given below a hypothetical case of 4 data and 4
     nodes in which we will not loose any data even if 3 drive
     goes blank.  
-    ![image for raid fault tolerance](/images/raid_system_design.jpg)
+    ![image for raid fault tolerance](images/raid_system_design.jpg)
     
 [Back to Table Of contents](#table_of_contents)
 
 ## <a name='algorithm_analysis'></a> Algorithm analysis
 * **Dominance Relation while deciding the asymptotic bound**:
 
-    > We say that f (n) dominates g(n) if &nbsp; &nbsp; ![image for dominance](/images/algo_analysic_dominance_rel.png)
+    > We say that f (n) dominates g(n) if &nbsp; &nbsp; ![image for dominance](images/algo_analysic_dominance_rel.png)
     
-    > Let’s see this definition in action. Suppose &nbsp; ![image for fn](/images/algo_analysic_fn.png) &nbsp; and &nbsp; ![image for gn](/images/algo_analysis_gn.png) &nbsp;.  
+    > Let’s see this definition in action. Suppose &nbsp; ![image for fn](images/algo_analysic_fn.png) &nbsp; and &nbsp; ![image for gn](images/algo_analysis_gn.png) &nbsp;.  
      Clearly f (n) > g(n) for all n, but it does not dominate
       since  
-      ![image for example](/images/algo_analysis_dominance_ex_1.png)  
+      ![image for example](images/algo_analysis_dominance_ex_1.png)  
       This is to be expected because both functions are in the
-      class &nbsp; ![image for theta](/images/algo_analysis_theta_rel.png).  
-      What about f (n) = &nbsp; ![image for n_square](/images/algo_analysis_n_square.png) &nbsp;  and g(n) = &nbsp; ![image for n cube](/images/algo_analysis_n_cube.png) &nbsp; ? Since  
-        ![image for ex2](/images/algo_analysis_dominance_ex_2.png)
+      class &nbsp; ![image for theta](images/algo_analysis_theta_rel.png).  
+      What about f (n) = &nbsp; ![image for n_square](images/algo_analysis_n_square.png) &nbsp;  and g(n) = &nbsp; ![image for n cube](images/algo_analysis_n_cube.png) &nbsp; ? Since  
+        ![image for ex2](images/algo_analysis_dominance_ex_2.png)
         
         
 * **Problem for finding the big oh**
 
-    Problem: Is &nbsp; ![big oh example 1](/images/big_oh_ex_1.png) ?  
+    Problem: Is &nbsp; ![big oh example 1](images/big_oh_ex_1.png) ?  
     Solution:  
     For solving these kinds of problem we should always go by the definition.
     > So, f(n) = O(g(n)) if and only if there exists a constant c such that for all sufficiently large n,  f(n) <= c * g(n).
     
-    We can see that &nbsp; ![image for example 2](/images/big_oh_ex_2.png) &nbsp; for any c >= 2.
-     >Also, &nbsp; ![image for omega gn](/images/omega_gn.png) &nbsp; iff there exists a constant c > 0 such that for all sufficiently large n f(n) > c * g(n).
+    We can see that &nbsp; ![image for example 2](images/big_oh_ex_2.png) &nbsp; for any c >= 2.
+     >Also, &nbsp; ![image for omega gn](images/omega_gn.png) &nbsp; iff there exists a constant c > 0 such that for all sufficiently large n f(n) > c * g(n).
      
     This would be satisfied for any 0 < c <= 2.  
-    Together the big oh and omega bounding imply &nbsp; ![big on example 1](/images/big_oh_ex_1.png).
+    Together the big oh and omega bounding imply &nbsp; ![big on example 1](images/big_oh_ex_1.png).
 
 [Back to Table Of contents](#table_of_contents)
 
@@ -326,7 +326,7 @@ Solution:
       have been marked lazy.
     > * We need to update the node values only when searching.
 
-![Image for segment tree](/images/segment_tree.jpg)
+![Image for segment tree](images/segment_tree.jpg)
 
 * Code for building a `segment tree`:
 ```c++
@@ -420,7 +420,7 @@ Solution:
  
 ## <a name='math_formulas_and_proofs'></a> Mathematical formulas and proofs
 * **Sum of 1 to n**
-![image_for_arithmetic](/images/arithmatic_sequence.png)
+![image_for_arithmetic](images/arithmatic_sequence.png)
   
     Proof:
     > Suppose S(n) = 1 + 2 + . . . + n     &nbsp; &nbsp; &nbsp; &nbsp; (eq 1) 
@@ -434,33 +434,35 @@ Solution:
       2 S(n) = (n + 1) + (n + 1) + . . . (n + 1)  
       We should note that each number is (n + 1) and there are
       n elements. So the sum would be: n * (n + 1).
-      So ![image for arithmetic2](/images/arithmetic_seq_1.png)
+      So ![image for arithmetic2](images/arithmetic_seq_1.png)
   
 * **Sum of square of a sequence**  
-![image for arithmetic2](/images/arithmetic_seq_square.png)
+![image for arithmetic2](images/arithmetic_seq_square.png)
  
     Proof:  
-    > We know that  &nbsp; &nbsp; ![image_for_lemma](/images/arithmetic_lemma.png) &nbsp; &nbsp; (can be proved using mathematical induction). So  &nbsp; &nbsp; ![image for first step](/images/arithmetic_sqr_proof_step_1.png) &nbsp; &nbsp; which can be written as &nbsp; &nbsp; ![image for step2](/images/arithmetic_sqr_proof_step_2.png). &nbsp; &nbsp;  
-     By reducing the above equation we will get &nbsp; &nbsp; ![image for arithmetic2](/images/arithmetic_seq_1.png)
+    > We know that  &nbsp; &nbsp; ![image_for_lemma](images/arithmetic_lemma.png) &nbsp; &nbsp; (can be proved using mathematical induction). 
+    So  &nbsp; &nbsp; ![image for first step](images/arithmetic_sqr_proof_step_1.png) &nbsp; &nbsp; which can be written as &nbsp; &nbsp; 
+    ![image for step2](images/arithmetic_sqr_proof_step_2.png). &nbsp; &nbsp;  
+     By reducing the above equation we will get &nbsp; &nbsp; ![image for arithmetic2](images/arithmetic_sqr_sequence.png)
  
 * **Sum of cubes of a sequence**   
-![image for arithmetic3](/images/arithmetic_seq_cubes.png)
+![image for arithmetic3](images/arithmetic_seq_cubes.png)
  
     Proof:
     > We can prove this by induction. There is another way of proving this by using [link](https://proofwiki.org/wiki/Sum_of_Sequence_of_Cubes)
 
 * **Sum of Geometric Progression**  
-![image for geometric summation](/images/geometric_summation.png)
+![image for geometric summation](images/geometric_summation.png)
 
     Proof:
-    > We know that &nbsp; &nbsp; ![image for a_n](/images/a_n_minux_1.png) &nbsp; &nbsp;  
-      From this we can deduce that &nbsp; &nbsp; ![image for n_n_by_n_minus_1](/images/a_n_minus_1_by_n_minus_1.png) &nbsp; &nbsp;  
-      In GP we have &nbsp; &nbsp; ![image for gp](/images/geometric_progression.png) &nbsp; &nbsp;  
-      which can also be written as &nbsp; &nbsp; ![reverse gp](/images/reverse_geometric_progression.png) &nbsp; &nbsp; or &nbsp; &nbsp; ![gp reduced](/images/gp_reduced.png)
+    > We know that &nbsp; &nbsp; ![image for a_n](images/a_n_minux_1.png) &nbsp; &nbsp;  
+      From this we can deduce that &nbsp; &nbsp; ![image for n_n_by_n_minus_1](images/a_n_minus_1_by_n_minus_1.png) &nbsp; &nbsp;  
+      In GP we have &nbsp; &nbsp; ![image for gp](images/geometric_progression.png) &nbsp; &nbsp;  
+      which can also be written as &nbsp; &nbsp; ![reverse gp](images/reverse_geometric_progression.png) &nbsp; &nbsp; or &nbsp; &nbsp; ![gp reduced](images/gp_reduced.png)
     >
-    >  So &nbsp; &nbsp; ![gp reduced 2](/images/gp_reduced_2.png).
+    >  So &nbsp; &nbsp; ![gp reduced 2](images/gp_reduced_2.png).
     >
-    >  Hence &nbsp; &nbsp; ![gp sum final](/images/gp_sum_final.png).
+    >  Hence &nbsp; &nbsp; ![gp sum final](images/gp_sum_final.png).
     
 
 
@@ -470,30 +472,30 @@ Solution:
     arithmetic progression, namely
     H(n) = S(n, −1). They reflect the sum of the progression
     of simple reciprocals, namely  
-    ![log harmonic](/images/log_harmonic.png)
+    ![log harmonic](images/log_harmonic.png)
       
     > The Harmonic numbers prove important because they usually
     explain “where the log comes from” when one magically pops
     out from algebraic manipulation. For example, the key to
     analyzing the average case complexity of Quicksort is the
-    summation &nbsp; ![log harmonic sum](/images/log_harmonic_sum.png)  
+    summation &nbsp; ![log harmonic sum](images/log_harmonic_sum.png)  
      Employing the Harmonic number identity immediately
-     reduces this to &nbsp; ![image for n log n](/images/theta_n_log_n.png)
+     reduces this to &nbsp; ![image for n log n](images/theta_n_log_n.png)
 
     _Important properties_:  
-        ![log property 1](/images/log_property_1.png)  
-        ![log_property 2](/images/log_property_2.png)  
+        ![log property 1](images/log_property_1.png)  
+        ![log_property 2](images/log_property_2.png)  
     
     _Observations_:  
         
      * **The base of the logarithm has no real impact on the growth rate**: 
         
         Compare the following three values:   
-             ![log value example](/images/log_value_example.png)  
+             ![log value example](images/log_value_example.png)  
         A big change in the base of the logarithm produces 
         little difference in the value of the log. Changing
         the base of the log from a to c involves dividing by
-        &nbsp; ![log c a](/images/log_c_a.png). This conversion factor is lost to
+        &nbsp; ![log c a](images/log_c_a.png). This conversion factor is lost to
         the Big Oh notation whenever a and c are constants.
         Thus we are usually justified in ignoring the base of
         the logarithm when analyzing algorithms.
@@ -501,7 +503,7 @@ Solution:
      * **Logarithms cut any function down to size**:  
         The growth rate of the logarithm of any polynomial
         function is O(lg n). This follows because  
-        ![log power reduction](/images/log_power_reduction.png)
+        ![log power reduction](images/log_power_reduction.png)
             
     #### Importance of even split  
     
@@ -515,9 +517,9 @@ Solution:
     telephone book, how important is it that each query
     split the book exactly in half? Not much. For the
     Manhattan telephone book, we now use &nbsp;
-    ![image for even split](/images/log_base_example_1.png) &nbsp; queries in the worst case,
+    ![image for even split](images/log_base_example_1.png) &nbsp; queries in the worst case,
     not a significant change from &nbsp;
-    ![image for even split](/images/log_base_example_2.png) &nbsp;. The power of binary search
+    ![image for even split](images/log_base_example_2.png) &nbsp;. The power of binary search
     comes from its logarithmic complexity, not the base of
     the log. 
 
@@ -537,7 +539,7 @@ Solution:
 
 * **Algorithm for calculating polynomial equations:**  
 
-    > ![image for equation 1](/images/pol_equation.png)
+    > ![image for equation 1](images/pol_equation.png)
     > 
     > We need to calculate p(x)
 
@@ -548,7 +550,7 @@ Solution:
      int xpower = 1;
      for (int i = 1; i <= n; ++i) {
         xpower = x ∗ xpower;
-        p = p + a i ∗ xpower;
+        p = p + a[i] ∗ xpower;
      }
     ```
     > In this algorithm we have to perform 2*n multiplications and n additions. Which is not that good.
@@ -563,8 +565,8 @@ Solution:
     return res;
     ```
     > This algorithm assumes the fact that,
-    > ![image for equation1](/images/pol_equation.png) can be written as
-    > ![image for equation2](/images/pol_equation_1.png)
+    > ![image for equation1](images/pol_equation.png) can be written as
+    > ![image for equation2](images/pol_equation_1.png)
     > If we go on like that we will have `a[n]` and next one will be
     > `a[n-1]*x`.
     
@@ -572,8 +574,8 @@ Solution:
     
     The simplest algorithm performs n − 1 multiplications, by computing a × a ×
     . . . × a. However, we can do better by observing that 
-    n = &nbsp; ![image for floor and ceil](/images/floor_and_ceil.png)  
-    If n is even, then &nbsp; ![image for relation](/images/algo_fast_exp1.png) &nbsp;. If n is odd, then &nbsp; ![image for relation](/images/algo_fast_exp2.png)  
+    n = &nbsp; ![image for floor and ceil](images/floor_and_ceil.png)  
+    If n is even, then &nbsp; ![image for relation](images/algo_fast_exp1.png) &nbsp;. If n is odd, then &nbsp; ![image for relation](images/algo_fast_exp2.png)  
     
     > In either case, we have halved the size of our exponent
       at the cost of, at most, two multiplications, so
@@ -710,10 +712,14 @@ Solution:
      process till we are left with only 2 companies, which
      we can merge in `2 C 2` ways.  
      So no of ways can be written as &nbsp; 
-     ![image for merge](/images/merge_ways.png).
+     ![image for merge](images/merge_ways.png).
    
 [Back to Table Of contents](#table_of_contents)
 
 
 ### Disclaimer:
-Some of the things which are listed above are taken from various sources including but not limited to `The algorithm design manual by Skiena`. I do not claim ownership of entire content which has been posted here. This readme is a reference which I am using while studying different things.
+Some of the things which are listed above are taken from various 
+sources including but not limited to `The algorithm design manual by Skiena`. 
+I do not claim ownership of entire content which has been posted 
+here. This readme is a reference which I am using while studying 
+different things.
