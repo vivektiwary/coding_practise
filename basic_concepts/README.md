@@ -6,6 +6,7 @@
     2. [Recursive Objects](#recursive_objects)
     3. [Dictionaries](#dictionaries)
         1. [Comparing Dictionary Implementations](#comparing_dictionary_implementation)
+    4. [Binary Search Trees](#binary_search_tree)
 2. [Sorting and Searching](#sorting_and_searching)
     1. [Application of Sorting](#application_of_sorting)
     2. [Order of Sorting](#order_of_sorting)
@@ -14,7 +15,7 @@
         2. [Constructing Heaps](#constructing_heaps)
         3. [Extracting the Minimum](#extracting_minimum)
         4. [Faster Heap Construction](#faster_heap_construction)
-2. [Algorithm Analysis](#algorithm_analysis)
+3. [Important Questions](#important_questions)
 3. [Common Algorithms](#common_algorithms)
 4. [Data Structures and Concepts](#important_data_structures_and_concepts)
 5. [Mathematical formulas and their Proofs](#math_formulas_and_proofs)
@@ -202,6 +203,129 @@ For example, If an operation is taking `O(n)` and another one is also
 taking `O(n)` but if we do some processing(may be another loop, so the 
 effective complexity would remain O(n)) in the first operation then
 the next operation would be `O(1)`.
+
+
+
+### <a name='binary_search_tree'></a> Binary Search Trees
+
+We have seen data structures that allow `fast search` or `flexible update`, 
+but not `fast search` and `flexible update`.  
+`Unsorted`, `doubly-linked` lists supported `insertion` and
+`deletion` in `O(1)` time but `search` took `linear time` in the worse case.
+`Sorted arrays` support `binary search` and `logarithmic query times`, but 
+at the cost of `linear-time update`.
+
+Binary search requires that we have fast access to two elements—specifically
+the median elements above and below the given node.  To combine these ideas, 
+we need a `linked list` with `two pointers per node`. This is the basic 
+idea behind `binary search trees`.
+
+A `rooted binary tree` is recursively defined as either being 
+- empty, or 
+- consisting of a node called the `root`, together with two rooted binary 
+trees called the left and right subtrees, respectively.
+
+A `binary search tree` labels each node in a `binary tree` with a `single 
+key` such that for any `node labeled x`, `all nodes` in the `left subtree` 
+of `x` have `keys < x` while all nodes in the `right subtree` of `x` have 
+`keys > x`. This `search tree labeling` scheme is `very special`. For any 
+`binary tree` on `n` nodes, and any set of `n` keys, there is `exactly one` 
+labeling that makes it a `binary search tree`.
+
+
+**Finding minimum and maximum element in a tree**:
+
+>Implementing the `find-minimum` operation requires knowing where the 
+minimum element is in the tree. By definition, the `smallest key` must 
+reside in the `left subtree` of the `root`, since all keys in the 
+`left subtree` have values less than that of the `root`. The minimum 
+element must be the `leftmost` descendent of the root. Similarly, the 
+maximum element must be the rightmost descendent of the root.
+
+```c
+tree *find_minimum(tree *t)
+{
+    tree *min;                  /* pointer to minimum */
+    if (t == NULL) return(NULL);
+    min = t;
+    while (min->left != NULL)
+        min = min->left;
+    return(min);
+}
+```
+
+**Insertion in a tree**:
+> There is only one place to insert an item `x` into a `binary search tree` 
+`T` where we know we can find it again. We must replace the `NULL` pointer 
+found in `T` after an `unsuccessful query` for the `key k`.
+>
+>This implementation uses `recursion` to combine the `search` and `node 
+insertion` stages of `key insertion`. The three arguments to insert tree 
+are
+> - a pointer `l` to the `pointer linking` the `search subtree` to the 
+`rest of the tree`,
+> - the key `x` to be inserted, and 
+> - a `parent pointer` to the `parent node` containing `l`.
+
+```c
+insert_tree(tree **l, item_type x, tree *parent)
+{
+    tree *p;                /* temporary pointer */
+    if (*l == NULL) {
+        p = malloc(sizeof(tree)); /* allocate new node */
+        p->item = x;
+        p->left = p->right = NULL;
+        p->parent = parent;
+        *l = p;                 /* link into parent’s record */
+        return;
+    }
+    if (x < (*l)->item)
+        insert_tree(&((*l)->left), x, *l);
+    else
+        insert_tree(&((*l)->right), x, *l);
+}
+```
+
+Allocating the node and `linking` it in to the tree is a `constant-time` 
+operation after the `search` has been `performed` in `O(h)` time.
+
+
+**Deletion from a Tree**:
+>Deletion is somewhat trickier than insertion, because removing a node 
+means appropriately linking its two descendant subtrees back into the 
+tree somewhere else. There are three cases:
+> - `Leaf nodes` have `no children`, and so may be `deleted` by simply 
+`clearing` the pointer to the `given node`.
+> - The case of the `doomed node` having `one child` is also straightforward. 
+There is `one parent` and `one grandchild`, and we can `link the grandchild` 
+directly to the `parent` without `violating` the `in-order` labeling property 
+of the tree.
+> - But what of a to-be-deleted node with `two children`? Our solution is 
+to `relabel` this node with the `key` of its `immediate successor` in 
+`sorted order`. This `successor` must be the `smallest value` in the 
+`right subtree`, specifically the `leftmost descendant` in the `right 
+subtree (p)`. Moving this to the `point of deletion` results in a 
+properly-labeled `binary search tree`, and reduces our `deletion problem` 
+to physically removing a node with at most `one child`—a case that has 
+been resolved above.
+
+
+> A binary tree can have `heights` ranging from `lg n` to `n`. But how 
+`tall are they on average`? The `average case` analysis of algorithms can 
+be `tricky` because we must `carefully` specify what `we mean by average`. 
+The question is well defined if `we consider each of the n!` possible insertion 
+orderings `equally likely` and average over those. If so, we are in luck, 
+because with `high probability` the resulting `tree` will have `O(log n)` 
+height.
+>
+> This argument is an important example of the power of `randomization`. 
+We can often develop simple algorithms that offer good performance with 
+`high probability`. We will see that a similar idea underlies the fastest 
+known sorting algorithm, `quicksort`.
+
+
+
+
 
 
 ## <a name='sorting_and_searching'></a> Sorting and Searching
@@ -453,3 +577,5 @@ Since this sum is not quite a `geometric series`, we can’t apply the usual ide
 Does it matter that we can construct heaps in `linear time` instead of `O(n log n)`? Usually not. The construction time did not dominate the complexity of `heapsort`, so improving the construction time does not improve its worst-case performance. Still, it is an impressive display of the power of careful analysis, and the free lunch that `geometric series` convergence can sometimes provide.
 
 
+### <a name='important_questions'></a> Important Questions
+- How many binary tree can be formed using `n` nodes?
