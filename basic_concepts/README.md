@@ -5,6 +5,7 @@
     1. [Arrays](#arrays)
     2. [Recursive Objects](#recursive_objects)
     3. [Dictionaries](#dictionaries)
+        1. [Comparing Dictionary Implementations](#comparing_dictionary_implementation)
 2. [Sorting and Searching](#sorting_and_searching)
     1. [Application of Sorting](#application_of_sorting)
     2. [Order of Sorting](#order_of_sorting)
@@ -123,7 +124,84 @@ from `D`. This enables the dictionary to serve as a `priority queue`.
 immediately before (or after) `k` in sorted order. These enable us to iterate
 through the elements of the data structure.
 
+>Many common data processing tasks can be handled using these dictionary
+operations. For example, suppose we want to remove all duplicate names from a
+mailing list, and print the results in sorted order.
+>
+>Initialize an empty dictionary D, whose search key will be the record name. 
+Now read through the mailing list, and for each record search to see if the 
+name is already in D. If not, insert it into D.
+>
+>Once finished, we must extract the remaining names out of the dictionary.
+By starting from the first item Min(D) and repeatedly calling Successor until we
+obtain Max(D), we traverse all elements in sorted order.
 
+
+
+### <a name='comparing_dictionary_implementation'></a>Comparing Dictionary Implementation
+**Problem**:
+>What are the asymptotic worst-case running times for each of the seven
+fundamental dictionary operations (search, insert, delete, successor, predecessor,
+minimum, and maximum) when the data structure is implemented as:
+> - An unsorted array
+> - A sorted array
+
+**Solution**:
+
+This problem reveal some of the inherent trade-offs 
+of data structure design. A given data representation may permit efficient 
+implementation of certain operations at the cost that other operations 
+are expensive.
+
+In addition to the array in question, we will assume access to a 
+few extra variables such as `n`—the number of elements currently in 
+the array. Note that we must maintain the value of these variables 
+in the operations where they change (e.g., `insert` and `delete`), 
+and `charge these operations` the cost of this `maintenance`.
+
+The basic dictionary operations can be implemented with the following costs
+on unsorted and sorted arrays, respectively:
+
+| Dictionary Operation | Unsorted Array | Sorted Array  |
+| :------------------: | :------------: | :-----------: |
+| Search(L, k)         | O(n)           | O(log n)      |
+| Insert(L, x)         | O(1)           | O(n)          |
+| Delete(L, x)         | O(1)*          | O(n)          |
+| Successor(L, x)      | O(n)           | O(1)          |
+| Predecessor(L, x)    | O(n)           | O(1)          |
+| Minimum(L)           | O(n)           | O(1)          |
+| Maximum(L)           | O(n)           | O(1)          |
+
+
+`Deletion` is somewhat trickier, hence the superscript( ∗ ) in the table. 
+The definition states that we are given a pointer `x` to the element to 
+delete, so we need not spend any time searching for the element. But 
+removing the `xth` element from the array `A` leaves `a hole` that must 
+be filled. We could fill the `hole` by moving each of the elements 
+`A[x + 1]` to `A[n]` up `one position`, but this requires `Θ(n)` time 
+when the first element is deleted. The following idea is better: 
+just write over `A[x]` with `A[n]`, and decrement `n`. This only takes
+`constant time`.
+
+Implementing a dictionary using a `sorted array` completely `reverses` 
+our notions of what is `easy` and what is `hard`. Searches can now be 
+done in `O(log n)` time, using `binary search`, because we know the 
+`median element` sits in `A[n/2]`. Since the upper and lower portions of 
+the array are also `sorted`, the `search` can continue recursively on the 
+appropriate portion. The number of `halvings of n` until we get to a 
+single element is `Math.ceil(lg n)`.
+
+>Data structure design must balance all the different operations it 
+supports. The fastest data structure to support both operations `A` and `B` 
+may well `not` be the `fastest structure` to support either `operation A` or
+`B`.
+
+**Note**: We can charge a operation some extra money (which will be asymptotically 
+same), to make some other critical operation faster.
+For example, If an operation is taking `O(n)` and another one is also
+taking `O(n)` but if we do some processing(may be another loop, so the 
+effective complexity would remain O(n)) in the first operation then
+the next operation would be `O(1)`.
 
 
 ## <a name='sorting_and_searching'></a> Sorting and Searching
