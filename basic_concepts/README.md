@@ -7,6 +7,11 @@
     3. [Dictionaries](#dictionaries)
         1. [Comparing Dictionary Implementations](#comparing_dictionary_implementation)
     4. [Binary Search Trees](#binary_search_tree)
+    5. [Priority Queue](#priority_queue)
+        1. [Basic Priority Queue Implementation](#basic_priority_queue_implementation)
+    6. [Hashing and String](#hashing_and_string)
+        1. [Collision Resolution](#collision_resolution)
+    7. [Specialised Data Structures](#specialised_data_structures)
 2. [Sorting and Searching](#sorting_and_searching)
     1. [Application of Sorting](#application_of_sorting)
     2. [Order of Sorting](#order_of_sorting)
@@ -401,7 +406,103 @@ data structure is
   `logarithmic time` on a `tree`, and hence can be `folded` into the `cost` 
   of each `deletion`.
 
+[Table of contents](#table_of_contents)
 
+### <a name='hashing_and_string'></a> Hashing and String
+
+`Hash tables` are a very practical way to maintain a `dictionary`. They 
+exploit the fact that `looking an item` up in an `array` takes `constant 
+time` once you have its index. A `hash function` is a `mathematical function`
+that maps `keys to integers`. We will use the `value of our hash function` 
+as an `index` into an `array`, and `store` our item at that `position`.
+
+The first step of the hash function is usually to map each key to a 
+big integer. Let `α` be the size of the alphabet on which a given 
+string `S` is written. Let `char(c)` be a function that maps each 
+symbol of the `alphabet` to a `unique integer` from `0` to `α − 1`. 
+The function  
+![image for hash function](../images/hash_function.png)  
+maps `each string` to a `unique` (but large) integer by treating the 
+characters of the string as “digits” in a `base-α` number system.
+
+The result is `unique identifier` numbers, but they are `so large` 
+they will quickly `exceed` the number of `slots` in our `hash table`
+(denoted by `m`). We must reduce this number to an integer between 
+`0` and `m−1`, by taking the remainder of `H(S) mod m`.
+This works on the same principle as a `roulette wheel`. The ball 
+travels a `long distance` around and around the `circumference-m` 
+wheel `Math.floor( H(S)/m )` times before settling down to a `random bin`. 
+If the `table size` is selected with `enough finesse` 
+(ideally `m` is a `large prime` not too close to 2<sup>i</sup> − 1), 
+the resulting hash values should be `fairly uniformly distributed`.
+
+
+### <a name='collision_resolution'></a> Collision Resolution
+
+No matter how good our hash function is, we had better be prepared 
+for collisions, because `two distinct keys` will occasionally 
+`hash to the same value`.
+
+- `Chaining` is the `easiest approach` to `collision resolution`. 
+Represent the `hash table` as an `array of m linked lists`.
+The `ith` list will contain all the items that hash to the value of `i`.
+Thus `search`, `insertion`, and `deletion` reduce to the corresponding
+problem in `linked lists`.
+
+    - If the `n keys` are `distributed uniformly` in a table, each list
+    will contain roughly `n/m` elements, making them a `constant size` when 
+    `m ≈ n`.
+
+    - `Chaining` is `very natural`, but devotes a considerable amount of memory 
+    to `pointers`. This is space that could be used to make the table larger, 
+    and hence the "lists" smaller.
+
+- The alternative is something called `open addressing`.
+    - The hash table is maintained as an `array of elements` (not buckets), 
+      each initialized to `null`.
+    - On an `insertion`, we check to see if the desired position is `empty`.
+      If so, we `insert` it. If not, we must find some other place to insert
+      it instead.
+    - The simplest possibility (called `sequential probing`) inserts the item 
+      in the `next open spot` in the table.
+    - If the `table` is `not too full`, the contiguous runs of items should 
+      be `fairly small`, hence this `location` should be only a few slots 
+      from its `intended position`.
+    - `Searching` for a given key now involves going to the appropriate hash 
+      value and checking to see if the item there is the one we want. If so,
+      return it. Otherwise we must keep checking through the length of
+      the run.
+    - `Deletion` in an `open addressing scheme` can get `ugly`, since removing
+       one element might `break a chain of insertions`, making some elements
+       inaccessible. We have `no alternative` but to `reinsert` all the items 
+       in the run following the `new hole`.
+
+[Table of contents](#table_of_contents)
+
+### <a name='specialised_data_structures'></a> Specialised Data Structures
+- `String data structures` – Character strings are typically represented by 
+   arrays of characters, perhaps with a special character to mark the end of 
+   the string. `Suffix trees/arrays` are special data structures that preprocess 
+   strings to make `pattern matching` operations `faster`.
+   
+- `Geometric data structures` – Geometric data typically consists of collections 
+   of `data points and regions`. `Regions` in the `plane` can be described by 
+   `polygons`, where the `boundary of the polygon` is given by a `chain of line 
+   segments`. `Polygons` can be represented using an `array of points` 
+   (v<sub>1</sub> , . . . , v<sub>n</sub> , v<sub>1</sub> ), such that (v<sub>i</sub> , v<sub>i+1</sub> ) 
+   is a `segment` of the `boundary`. `Spatial data structures` such as
+   `kd-trees` organize `points and regions` by `geometric location` to 
+   support `fast search`.
+
+- `Graph data structures` – Graphs are typically represented using either 
+   `adjacency matrices` or `adjacency lists`. The choice of representation 
+   can have a substantial impact on the design of the resulting `graph 
+   algorithms`.
+
+- `Set data structures` – `Subsets of items` are typically represented using 
+   a dictionary to support `fast membership queries`. Alternately, `bit vectors` 
+   are `boolean arrays` such that the i<sup>th</sup> bit represents `true` 
+   if `i` is in the `subset`.
 
 ## <a name='sorting_and_searching'></a> Sorting and Searching
 
