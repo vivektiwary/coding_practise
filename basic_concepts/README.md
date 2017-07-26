@@ -10,7 +10,7 @@
 2. [Sorting and Searching](#sorting_and_searching)
     1. [Application of Sorting](#application_of_sorting)
     2. [Order of Sorting](#order_of_sorting)
-    3. [Heapsort: Fast Sorting via Data Structures](#heap_sort)
+    3. [Heap-sort: Fast Sorting via Data Structures](#heap_sort)
         1. [Heaps](#heaps)
         2. [Constructing Heaps](#constructing_heaps)
         3. [Extracting the Minimum](#extracting_minimum)
@@ -91,6 +91,8 @@ the program.
   arise frequently in the analysis of data structures.
 
 
+[Table of contents](#table_of_contents)
+
 ### <a name='recursive_objects'></a> Recursive objects
 - `Lists` – Chopping the first element off a linked list leaves a `smaller linked list`.
 This same argument works for `strings`, since removing characters from string
@@ -137,6 +139,8 @@ name is already in D. If not, insert it into D.
 By starting from the first item Min(D) and repeatedly calling Successor until we
 obtain Max(D), we traverse all elements in sorted order.
 
+
+[Table of contents](#table_of_contents)
 
 
 ### <a name='comparing_dictionary_implementation'></a>Comparing Dictionary Implementation
@@ -204,6 +208,8 @@ taking `O(n)` but if we do some processing(may be another loop, so the
 effective complexity would remain O(n)) in the first operation then
 the next operation would be `O(1)`.
 
+
+[Table of contents](#table_of_contents)
 
 
 ### <a name='binary_search_tree'></a> Binary Search Trees
@@ -325,6 +331,75 @@ known sorting algorithm, `quicksort`.
 
 
 
+[Table of contents](#table_of_contents)
+
+
+### <a name='priority_queue'></a> Priority Queues
+
+`Priority queues` are data structures that provide more flexibility than 
+`simple sorting`, because they allow `new elements` to enter a system at 
+arbitrary intervals. It is much more `cost-effective` to insert a new job 
+into a `priority queue` than to `re-sort` everything on each such arrival.
+
+The basic priority queue supports three primary operations:
+- `Insert(Q,x)`– Given an item `x` with key `k`, insert it into the 
+`priority queue Q`.
+- `Find-Minimum(Q)` or `Find-Maximum(Q)`– Return a pointer to the item 
+whose `key` value is `smaller` (`larger`) than any other key in the 
+`priority queue Q`.
+- `Delete-Minimum(Q)` or `Delete-Maximum(Q)`– Remove the item from the 
+`priority queue Q` whose `key` is minimum (maximum).
+
+
+[Table of contents](#table_of_contents)
+
+### <a name='basic_priority_queue_implementation'></a> Basic Priority Queue Implementation
+
+**Problem**:
+> What is the worst-case time complexity of the three basic priority queue
+operations (`insert`, `find-minimum`, and `delete-minimum`) when the basic 
+data structure is
+> - An unsorted array
+> - A sorted array
+> - A balanced binary search tree
+
+**Solution**:
+>There is surprising subtlety in implementing these three operations, even
+ when using a data structure as simple as an unsorted array. The unsorted array
+ dictionary implemented `insertion` and `deletion` in `constant time`, and 
+ `search` and minimum in `linear time`.  
+ A `linear time` implementation of `delete-minimum` can be composed from 
+ `find-minimum`, followed by `search`, followed by `delete`.
+>
+>For sorted arrays, we can implement `insert` and `delete` in `linear time`,
+ and `minimum` in `constant time`. However, all `priority queue` `deletions` 
+ involve only the `minimum element`. By `storing` the `sorted array` in `reverse` 
+ order (largest value on top), the `minimum element` will be the `last one` 
+ in the array. `Deleting` the `tail element` requires `no movement` of any 
+ items, just decrementing the number of remaining items n, and so 
+ `delete-minimum` can be implemented in `constant time`.
+>
+> All this is fine, yet the following table claims we can implement `find-minimum`
+  in `constant time` for each data structure:
+  
+|                   | Unsorted Array | Sorted Array | Balanced Tree |
+|:------------:     | :-----------:  | :----------: | :-----------: |
+| Insert(Q, x)      | O(1)           | O(n)         | O(log n)      |
+| Find-Minimum(Q)   | O(1)           | O(1)         | O(1)          |
+| Delete-Minimum(Q) | O(n)           | O(1)         | O(log n)      |
+
+> The trick is using an `extra variable` to store a `pointer/index` to the `minimum`
+  entry in each of these structures, so we can simply return this value whenever we
+  are asked to `find-minimum`.
+>
+> Updating this pointer on each insertion is easy—we update it if and only 
+  if the newly inserted value is `less than the current minimum`.
+>
+> But what happens on a `delete-minimum`? We can `delete` the `minimum entry` 
+  `have`, then do an `honest find-minimum` to restore our `canned value`. 
+  The `honest find-minimum` takes `linear time` on an `unsorted array` and 
+  `logarithmic time` on a `tree`, and hence can be `folded` into the `cost` 
+  of each `deletion`.
 
 
 
