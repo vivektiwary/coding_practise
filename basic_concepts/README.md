@@ -20,6 +20,8 @@
         2. [Constructing Heaps](#constructing_heaps)
         3. [Extracting the Minimum](#extracting_minimum)
         4. [Faster Heap Construction](#faster_heap_construction)
+    4. [Sorting by Incremental Insertion](#sorting_by_incremental_insertion)
+    5. [MergeSort: Sorting by Divide-and-Conquer](#merge_sort)
 3. [Important Questions](#important_questions)
 3. [Common Algorithms](#common_algorithms)
 4. [Data Structures and Concepts](#important_data_structures_and_concepts)
@@ -545,7 +547,7 @@ Of course we could make no decision about equal key order and let the ties fall 
 [Table of contents](#table_of_contents)
 
 
-### <a name='heap_sort'></a> Heapsort: Fast Sorting via Data Structures
+### <a name='heap_sort'></a> HeapSort: Fast Sorting via Data Structures
 
 We start with `data structure` design, because one of the most `dramatic algorithmic improvements` via `appropriate data structures` occurs in `sorting`. `Selection sort` is a simple-to-code algorithm that repeatedly extracts the smallest remaining element from the unsorted part of the set:
 
@@ -752,6 +754,129 @@ Since this sum is not quite a `geometric series`, we can’t apply the usual ide
 
 Does it matter that we can construct heaps in `linear time` instead of `O(n log n)`? Usually not. The construction time did not dominate the complexity of `heapsort`, so improving the construction time does not improve its worst-case performance. Still, it is an impressive display of the power of careful analysis, and the free lunch that `geometric series` convergence can sometimes provide.
 
+[Table of contents](#table_of_contents)
+
+### <a name='sorting_by_incremental_insertion'></a> Sorting by Incremental Insertion
+
+Insertion sort:
+
+```c
+InsertionSort(A)
+    A[0] = −∞
+    for i = 2 to n do
+        j = i
+        while (A[j] < A[j − 1]) do
+            swap(A[j], A[j − 1])
+            j = j − 1
+```
+
+Although `insertion sort` takes O(n<sup>2</sup>) in the worst case, it 
+performs considerably better if the data is `almost sorted`, since `few 
+iterations` of the `inner loop` suffice to sift it into the proper 
+position.
+
+`Insertion sort` is perhaps the simplest example of the `incremental insertion` 
+technique, where we build up a `complicated structure` on `n items` by 
+first building it on `n−1 items` and then making the necessary changes to 
+add the `last item`. `Incremental insertion` proves a particularly useful 
+technique in `geometric algorithms`.
+
+
+### <a name='merge_sort'></a> MergeSort: Sorting by Divide-and-Conquer
+
+`Recursive algorithms` reduce `large problems` into `smaller ones`. A 
+`recursive approach` to `sorting` involves `partitioning` the elements 
+into `two groups`, `sorting` each of the `smaller problems` `recursively`, 
+and then `interleaving` the `two sorted lists` to totally `order` the 
+elements. This algorithm is called `mergesort`, recognizing the importance
+of the `interleaving operation`:
+
+```c
+Mergesort(A[1, n])
+    Merge( MergeSort(A[1, n/2]), MergeSort(A[n/2 + 1, n]) )
+```
+
+The `basis case` of the `recursion` occurs when the sub-array to be sorted 
+consists of a `single element`, so `no rearrangement` is possible.
+
+The efficiency of `mergesort` depends upon how efficiently we combine the 
+`two sorted halves` into a `single sorted list`. We could concatenate them 
+into `one list` and call `heapsort` or some other `sorting algorithm` to do 
+it, but that would just `destroy` all the work spent `sorting` our component
+lists.
+
+What is the total running time of `mergesort`? It helps to think about how 
+much work is done at each level of the execution tree. If we assume for 
+simplicity that `n` is a `power of two`, the `kth level` consists of all 
+the 2<sup>k</sup> calls to `mergesort` processing sub-ranges of n/2<sup>k</sup> 
+elements.
+
+The work done on the `(k = 0)th` level involves merging `two sorted lists`, 
+each of size `n/2`, for a total of at most `n − 1` comparisons. The work 
+done on the `(k = 1)th` level involves `merging` `two pairs of sorted lists`, 
+each of size `n/4`, for a total of at most `n−2` comparisons. In general, 
+the work done on the `kth` level involves merging 2<sup>k</sup> pairs 
+`sorted list`, each of size n/2<sup>k+1</sup> , for a total of at 
+most n − 2<sup>k</sup> comparisons.
+
+`Linear work` is done merging all the elements on each level. Each of 
+the `n` elements appears in exactly one sub-problem on each level. 
+The most expensive case (in terms of comparsions) is actually the 
+top level.
+
+The number of elements in a sub-problem gets `halved` at `each level`. 
+Thus the number of times we can `halve` `n` until we get to `1` is 
+**Math.ceil(lg<sub>2</sub> n)**.
+
+Because the recursion goes `lg n` levels deep, and a `linear amount` of 
+work is done per level, `mergesort` takes `O(n log n)` time in the 
+worst case.
+- `Mergesort` is a great algorithm for `sorting linked lists`, because 
+  it does not rely on `random access` to elements as does `heapsort` or 
+  `quicksort`.
+  
+- Its primary disadvantage is the need for an `auxilliary buffer` when 
+  sorting arrays. It is easy to merge `two sorted linked lists` without 
+  using any `extra space`, by just `rearranging the pointers`.
+  
+```c
+mergesort(item_type s[], int low, int high)
+{
+    int i;                  /* counter */
+    int middle;             /* index of middle element */
+    if (low < high) {
+        middle = (low+high)/2;
+        mergesort(s,low,middle);
+        mergesort(s,middle+1,high);
+        merge(s, low, middle, high);
+    }
+}
+```
+
+```c
+merge(item_type s[], int low, int middle, int high)
+{
+    int i;              /* counter */
+    queue buffer1, buffer2; /* buffers to hold elements for merging */
+    init_queue(&buffer1);
+    init_queue(&buffer2);
+    for (i=low; i<=middle; i++) enqueue(&buffer1,s[i]);
+    for (i=middle+1; i<=high; i++) enqueue(&buffer2,s[i]);
+    i = low;
+    while (!(empty_queue(&buffer1) || empty_queue(&buffer2))) {
+        if (headq(&buffer1) <= headq(&buffer2))
+            s[i++] = dequeue(&buffer1);
+        else
+            s[i++] = dequeue(&buffer2);
+    }
+    while (!empty_queue(&buffer1)) s[i++] = dequeue(&buffer1);
+    while (!empty_queue(&buffer2)) s[i++] = dequeue(&buffer2);
+}
+```
+
+[Table of contents](#table_of_contents)
+
+  
 
 ### <a name='important_questions'></a> Important Questions
 - How many binary tree can be formed using `n` nodes?
