@@ -22,8 +22,11 @@
         4. [Faster Heap Construction](#faster_heap_construction)
     4. [Sorting by Incremental Insertion](#sorting_by_incremental_insertion)
     5. [MergeSort: Sorting by Divide-and-Conquer](#merge_sort)
+    6. [QuickSort: Sorting by Randomization](#quick_sort)
+        1. [Intuition: The Expected Case for QuickSort](#expected_case_for_quick_sort)
+        2. [Randomised Algorithms](#randomized_algorithm)
 3. [Important Questions](#important_questions)
-3. [Common Algorithms](#common_algorithms)
+4. [Problems Wiki](#problem_wiki)
 4. [Data Structures and Concepts](#important_data_structures_and_concepts)
 5. [Mathematical formulas and their Proofs](#math_formulas_and_proofs)
 6. [Mathematical concepts and Algorithms](#mathematical_concepts_and_algorithm)
@@ -876,7 +879,271 @@ merge(item_type s[], int low, int middle, int high)
 
 [Table of contents](#table_of_contents)
 
+
+### <a name='quick_sort'></a> QuickSort: Sorting by Randomization
+
+Suppose we select a `random item` `p` from the `n items` we seek to sort. 
+`Quicksort` separates the `n − 1` other items into `two piles`: 
+- a `low pile` containing all the elements that appear `before p` in sorted 
+  order and 
+- a `high pile` containing all the elements that appear `after p` in sorted 
+  order. 
+
+`Low` and `high` denote the `array positions` we place the respective piles, 
+leaving a `single slot` between them for `p`.
+
+Such `partitioning` buys us `two things`. 
+- First, the `pivot element p` ends up in the `exact array position` it will 
+  reside in the the `final sorted order`. 
+- Second, `after partitioning` no element `flops` to the `other side` in the 
+  `final sorted order`. 
+
+Thus `we can now sort the elements to the left and the right of the pivot 
+independently`! This gives us a `recursive sorting algorithm`, since we can 
+use the `partitioning approach` to `sort` each `sub-problem`. The algorithm 
+must be correct since each element ultimately ends up in the `proper 
+position`:
+
+```c
+quicksort(item_type s[], int l, int h)
+{
+    int p;              /* index of partition */
+    if ((h-l)>0) {
+        p = partition(s,l,h);
+        quicksort(s,l,p-1);
+        quicksort(s,p+1,h);
+    }
+}
+```
+```c
+int partition(item_type s[], int l, int h)
+{
+    int i;              /* counter */
+    int p;              /* pivot element index */
+    int firsthigh;      /* divider position for pivot element */
+    
+    p = h;
+    firsthigh = l;
+    for (i=l; i<h; i++)
+        if (s[i] < s[p]) {
+            swap(&s[i],&s[firsthigh]);
+            firsthigh ++;
+        }
+    
+    swap(&s[p],&s[firsthigh]);
+    
+    return(firsthigh);
+}
+```
+
+Since the `partitioning step` consists of at most `n swaps`, it takes 
+`linear time` in the `number of keys`. But how long does the entire 
+`quicksort` take? As with `mergesort`, `quicksort` builds a `recursion 
+tree` of `nested sub-ranges` of the `n-element array`. As with `mergesort`, 
+`quicksort` spends `linear time` processing (now `partitioning` instead of
+`mergeing`) the elements in each sub-array on each level. As with 
+`mergesort`, `quicksort` runs in `O(n · h)` time, where `h` is the height 
+of the `recursion tree`.
+
+The difficulty is that the `height of the tree` depends upon where the 
+`pivot element` ends up in `each partition`. If we get very lucky and 
+happen to repeatedly pick the `median element` as our `pivot`, the 
+`sub-problems` are always `half the size` of the `previous level`. The 
+`height` represents the `number of times` we can `halve` `n` until we 
+get down to `1`, or at most **Math.ceil(lg<sub>2</sub> n)**.
+
+Now suppose we consistently get `unlucky`, and our `pivot element` always 
+`splits` the `array` as `unequally` as possible. This implies that the 
+`pivot element` is always the `biggest` or `smallest` element in the 
+`sub-array`. After this `pivot` settles into its `position`, we are left 
+with one `sub-problem of size n − 1`. We spent `linear work` and reduced 
+the size of our problem by `one measly element`. It takes a tree of height 
+`n − 1` to chop our array down to `one element per level`, for a worst 
+case time of Θ(n<sup>2</sup>).
+
+Thus, the worst case for `quicksort` is `worse` than `heapsort` or `mergesort`. 
+To justify its name, `quicksort` had better be good in the `average case`. 
+Understanding why requires some intuition about `random sampling`.
+
+[Table of contents](#table_of_contents)
+
+#### <a name='expected_case_for_quick_sort'></a> Intuition: The Expected Case for QuickSort
+
+The `expected performance` of `quicksort` depends upon the `height of the 
+partition tree` constructed by `random pivot elements` at each step. 
+`Mergesort` ran in `O(n log n)` time because we split the keys into two 
+equal halves, sorted them recursively, and then merged the halves in 
+`linear time`. Thus, whenever our `pivot element` is `near` the `center` 
+of the `sorted array` (i.e. , the `pivot` is close to the `median element`), 
+we get a `good split` and `realize the same performance as mergesort`.
+
+I will give an intuitive explanation of why `quicksort` is `O(n log n)` in 
+the `average case`. How likely is it that a `randomly selected pivot` is a 
+good one? The best possible selection for the `pivot` would be the `median 
+key`, because `exactly half of elements` would end up `left`, and `half 
+the elements` right, of the `pivot`. Unfortunately, we only have a 
+`probability` of `1/n` of `randomly selecting the median as pivot`, which 
+is quite small.
+
+Suppose a `key` is a `good enough pivot` if it lies is in the `center half` 
+of the `sorted space` of keys—i.e. , those ranked from `n/4` to `3n/4` in 
+the `space of all keys` to be sorted. Such good enough `pivot elements` are 
+quite plentiful, since `half the elements` lie closer to the `middle` 
+than one of the two ends. Thus, on `each selection` we will pick a 
+`good enough pivot` with `probability of 1/2`.
+
+Can you `flip a coin` so it comes up `tails each time`? `Not without cheating`. 
+If you flip a `fair coin` `n times`, it will come out `heads` about `half 
+the time`. Let `heads denote` the chance of `picking a good enough pivot`.
+
+The `worst possible good enough pivot` leaves the `bigger half` of the 
+`space partition` with `3n/4 items`. What is the height h<sub>g</sub> of a 
+`quicksort partition tree` constructed repeatedly from the `worst-possible` 
+`good enough pivot`? The deepest path through this tree passes through 
+partitions of size n, (3/4)n, (3/4)<sup>2</sup> n, . . ., down to 1. How
+many times can we multiply `n` by `3/4` until it gets down to `1`?
+
+(3/4)<sup>h<sub>g</sub></sup> n = 1 ⇒ n = (4/3)<sup>h<sub>g</sub></sup>
+
+so h<sub>g</sub> = log<sub>4/3</sub> n.
+
+But only `half of all randomly selected pivots` will be `good enough`. The 
+rest we classify as `bad`.
+
+The worst of these `bad pivots` will do essentially `nothing` to `reduce
+the partition size` along the `deepest path`. The `deepest path` from the 
+`root` through a typical `randomly-constructed` `quicksort partition tree` 
+will pass through roughly `equal numbers` of `good-enough` and `bad pivots`. 
+Since the expected number of `good splits` and `bad splits` is the `same`, 
+the `bad splits` can only `double the height of the tree`, so 
+h ≈ 2h<sub>g</sub> = 2 log<sub>4/3</sub> n, which is clearly `Θ(log n)`.
+
+On average, `random quicksort partition trees` (and by analogy, `binary search
+trees` under `random insertion`) are `very good`. More careful analysis shows 
+the `average height` after `n insertions` is approximately `2 ln n`. Since 
+
+>2 ln n ≈ 1.386 lg<sub>2</sub> n
+
+this is only `39%` taller than a `perfectly balanced binary tree`. Since 
+`quicksort` does `O(n)` work `partitioning on each level`, the average 
+time is `O(n log n)`. If we are `extremely unlucky` and our randomly 
+selected elements always are among the `largest` or `smallest` element 
+in the array, `quicksort` turns into `selection sort` and runs in 
+O(n<sup>2</sup> ). However, the odds against this are `vanishingly small`.
+
+[Table of contents](#table_of_contents)
+
+#### <a name='randomized_algorithm'></a> Randomized Algorithms
+
+There is an important subtlety about the expected case `O(n log n)` running 
+time for `quicksort`. Our `quicksort` implementation above selected the 
+`last element` in each sub-array as `the pivot`. Suppose this program were 
+given a `sorted array` as input. If so, at each step it would pick the 
+`worst possible pivot` and run in `quadratic time`.
+
+For any `deterministic method` of `pivot selection`, there exists a 
+`worst-case` input instance which will `doom` us to `quadratic time`. 
+The analysis presented above made no claim stronger than:
+> “QuickSort runs in Θ(n log n) time, with high probability, if you give
+  me randomly ordered data to sort.”
   
+But now suppose we add an `initial step` to our algorithm where we 
+`randomly permute` the order of the `n elements` before we try to 
+`sort them`. Such a `permutation` can be constructed in `O(n)` time. 
+This might `seem like wasted effort`, but it provides the `guarantee` 
+that `we can expect Θ(n log n) running time` whatever the initial input 
+was. The `worst case` performance `still can happen`, but it depends only 
+upon how `unlucky we are`. There is no longer a `well-defined` 
+“worst case” input. We now can say
+> “Randomized quicksort runs in Θ(n log n) time on any input, with high
+  probability.”
+
+Alternately, we could get the `same guarantee` by `selecting a random 
+element` to be the `pivot at each step`.
+
+`Randomization` is a powerful tool to `improve algorithms` with `bad 
+worst-case` but `good average-case` complexity. It can be used to make 
+`algorithms` more `robust to boundary cases` and `more efficient` on 
+highly structured input instances that confound `heuristic decisions` 
+(such as `sorted input to quicksort`). It often lends itself to simple 
+algorithms that provide `randomized performance guarantees` which
+are otherwise obtainable only using `complicated deterministic algorithms`.
+
+Some of the approaches to designing efficient randomized algorithms 
+are readily explainable:
+
+- `Random sampling` – Want to get an idea of the `median value` of `n things` 
+   but don’t have either the `time or space` to look at them all? Select a 
+   `small random sample` of the `input` and `study those`, for the results 
+   should be representative.
+   - This is the idea behind `opinion polling`. Biases creep in unless you 
+   take a truly `random sample`, as `opposed` to the `first x` people you 
+   happen to see. To `avoid bias`, actual `polling agencies` typically dial 
+   `random phone numbers` and hope `someone answers`.
+
+- `Randomized hashing` – We have claimed that `hashing` can be used to 
+   implement dictionary operations in `O(1)` “expected-time.” However, 
+   for any `hash function` there is a `given worst-case set of keys` 
+   that `all get hashed to the same bucket`. But now suppose we `randomly 
+   select our hash function` from a large family of `good ones` as the 
+   `first step` of our algorithm. We get the same type of `improved 
+   guarantee` that we did with `randomized quicksort`.
+   
+- `Randomized search` – Randomization can also be used to drive `search 
+   techniques` such as `simulated annealing`
+
+**Note**:
+> QuickSort is 2-3 times faster than merge sort or heap sort if the
+QuickSort is implemented well.
+
+[Table of contents](#table_of_contents)
 
 ### <a name='important_questions'></a> Important Questions
 - How many binary tree can be formed using `n` nodes?
+
+
+### <a name='problem_wiki'></a> Problems Wiki
+- `Nuts and Bolts Problem`
+  > The nuts and bolts problem is defined as follows. You are given a 
+    collection of `n` bolts of `different widths`, and `n` corresponding 
+    nuts. You `can test` whether a given `nut and bolt fit together`, 
+    from which you learn whether the `nut is too large`, `too small`, or 
+    an `exact match` for the `bolt`. The differences in `size` between 
+    pairs of `nuts or bolts` are `too small` to see by `eye`, so you 
+    `cannot compare the sizes` of two nuts or two bolts directly. 
+    You are to match each bolt to each nut.  
+    Give an O(n<sup>2</sup>) algorithm to solve the nuts and bolts problem. 
+    Then give a `randomized` O(n log n) expected time algorithm for the 
+    same problem.
+    
+  **Solution**:
+  > The brute force algorithm for matching nuts and bolts starts with the
+    `first bolt` and `compares it to each nut` until we find a match. In 
+    the worst case, this will require `n comparisons`. Repeating this for 
+    each successive bolt on all remaining nuts yields a 
+    `quadratic-comparison` algorithm.
+  >  - What if we pick a `random bolt` and try it? On average, we would 
+     expect to get about halfway through the `set of nuts` before we 
+     found the match, so this `randomized algorithm` would do `half the 
+     work` as the `worst case`. That counts as some kind of improvement, 
+     although `not an asymptotic one`.
+  >  - `Randomized quicksort` achieves the desired expected-case running 
+     time, so a natural idea is to `emulate` it on the nuts and bolts 
+     problem. Indeed, `sorting both the nuts and bolts` by `size` would 
+     yield a `matching`, since the `ith` largest nut must match the `ith` 
+     largest bolt.
+  > - The fundamental step in `quicksort` is partitioning elements around 
+     a `pivot`. Can we `partition nuts and bolts` around a `randomly 
+     selected` `bolt b`? Certainly we partition the nuts into those of 
+     size `less than b` and `greater than b`. But decomposing the problem 
+     into `two halves` requires `partitioning the bolts` as well, and we 
+     `cannot compare bolt against bolt`. But once we find the `matching nut` 
+     to `b` we can use it to `partition the bolts` accordingly. 
+     In `2n − 2` comparisons, we partition the nuts and bolts, and the 
+     remaining analysis follows directly from `randomized quicksort`.
+  > - What is interesting about this problem is that `no simple 
+     deterministic` algorithm for `nut and bolt sorting` is `known`. 
+     It illustrates how `randomization` makes the `bad case` go away, 
+     leaving behind a `simple and beautiful algorithm`.
+
+[Table of contents](#table_of_contents)
