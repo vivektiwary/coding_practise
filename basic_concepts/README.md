@@ -25,6 +25,15 @@
     6. [QuickSort: Sorting by Randomization](#quick_sort)
         1. [Intuition: The Expected Case for QuickSort](#expected_case_for_quick_sort)
         2. [Randomised Algorithms](#randomized_algorithm)
+    7. [Distribution Sort: Sorting via Bucketing](#distribution_sort)
+    8. [Binary Search and Related Algorithms](#binary_search_and_related_algorithms)
+        1. [Counting Occurrences](#counting_occurrences)
+        2. [One-Sided Binary Search](#one_sided_binary_search)
+        3. [Square and Other Roots](#square_and_other_roots)
+    9. [Divide-and-Conquer](#divide_and_conquer)
+        1. [Recurrence Relations](#recurrence_relations)
+        2. [Divide-and-Conquer Recurrences](#divide_and_conquer_recurrences)
+        3. [Solving Divide-and-Conquer Recurrences](#solving_divide_and_conquer_recurrences)
 3. [Important Questions](#important_questions)
 4. [Problems Wiki](#problem_wiki)
 4. [Data Structures and Concepts](#important_data_structures_and_concepts)
@@ -1097,6 +1106,361 @@ are readily explainable:
 QuickSort is implemented well.
 
 [Table of contents](#table_of_contents)
+
+### <a name='distribution_sort'></a> Distribution Sort: Sorting via Bucketing
+
+We could sort sorting names for the telephone book by partitioning them 
+according to the `first letter` of the `last name`. This will create `26 
+different piles`, or `buckets`, of names. Observe that any name in the `J` 
+pile `must occur` after `every name in the I pile`, but before any name 
+in the `K pile`. Therefore, we can proceed to sort each pile individually 
+and just `concatenate the bunch of sorted piles` together at the end.
+
+If the `names are distributed evenly` among the `buckets`, the resulting 
+`26 sorting problems` should each be `substantially smaller` than the 
+`original problem`. Further, by now `partitioning each pile` based on the 
+`second letter` of `each name`, we generate smaller and smaller piles. 
+The `names will be sorted` as soon as `each bucket contains` only a `single 
+name`. The resulting algorithm is commonly called `bucketsort` or
+`distribution sort`.
+
+`Bucketing` is a very effective idea whenever we are confident that the 
+`distribution of data` will be `roughly uniform`. It is the idea that 
+underlies `hash tables`, `kd-trees`, and a variety of other `practical 
+data` structures. The `downside` of such techniques is that the `performance` 
+can be `terrible` when the `data distribution` is not `what we expected`. 
+Although data structures such as `balanced binary trees` offer `guaranteed`
+`worst-case behavior` for `any input distribution`, `no such promise` 
+exists for `heuristic data structures` on `unexpected input distributions`.
+
+`Nonuniform distributions` do occur in `real life`. Consider Americans with 
+the uncommon last name of `Shifflett`. When last I looked, the Manhattan 
+telephone directory (with over one million names) contained exactly `five 
+Shiffletts`. So how many `Shiffletts` should there be in a small city of 
+50,000 people? The `Shifflett` clan is a fixture of the region, but it 
+would `play havoc` with any `distribution sort program`, as refining 
+buckets from `S to Sh to Shi to Shif to . . . to Shifflett` results in 
+`no significant partitioning`.
+
+[Table of contents](#table_of_contents)
+
+
+### <a name='binary_search_and_related_algorithms'></a> Binary Search and Related Algorithms
+
+`Binary search` is a `fast algorithm` for `searching in a sorted array` of 
+keys `S`. To search for `key q`, we compare `q` to the middle key `S[n/2]`. 
+If `q` appears before `S[n/2]`, it must reside in the `top half of S`; if 
+not, it must `reside in the bottom half of S`. By repeating this process 
+recursively on the correct half, we locate the key in a total of 
+`Math.ceil(lg n)` comparisons—a big win over the `n/2` comparisons 
+expect using `sequential search`:
+
+```c
+int binary_search(item_type s[], item_type key, int low, int high)
+{
+    int middle;                     /* index of middle element */
+    if (low > high) return (-1);
+    middle = (low+high)/2;
+    if (s[middle] == key) return(middle);
+    if (s[middle] > key)
+        return( binary_search(s,key,low,middle-1) );
+    else
+        return(binary_search(s,key,middle+1,high) );
+}
+```
+
+This much we probably know. What is important is to have a sense of just
+how fast binary search is. `Twenty questions` is a popular children’s 
+game where `one player selects a word` and the other repeatedly asks 
+`true/false` questions in an attempt to guess it. If the word remains 
+unidentified after `20 questions`, the `first party wins`; otherwise, 
+the `second player takes the honors`. In fact, the `second player always 
+has a winning strategy`, based on `binary search`. Given a printed 
+dictionary, the player opens it in the middle, selects a word (say “move”),
+and asks whether the unknown word is before “move” in alphabetical order. 
+Since standard dictionaries contain 50,000 to 200,000 words, we can be 
+certain that the process will terminate `within twenty questions`.
+
+[Table of contents](#table_of_contents)
+
+### <a name='counting_occurrences'></a> Counting Occurrences
+
+Several `interesting algorithms` follow from `simple variants` of 
+`binary search`. Suppose that `we want to count` the `number of times` 
+a given `key k` (say "John") occurs in a given `sorted array`. 
+Because `sorting` groups `all the copies of k` into a `contiguous
+block`, the problem reduces to finding the `right block` and then 
+measures `its size`.
+
+The `binary search` routine presented above enables us to find the index 
+of `an element` of the `correct block` (x) in `O(lg n)` time. The natural 
+way to identify the boundaries of the block is to `sequentially test` 
+elements to the `left of x` until we find the first one that differs from 
+the search key, and then repeat this search to the `right of x`. 
+The difference between the indices of the left and right boundaries
+(plus one) gives the count of the number of occurrences of `k`.
+
+This algorithm runs in `O(lg n + s)`, where `s` is the `number of 
+occurrences` of the `key`. This can be `as bad as linear` if the `entire 
+array` consists of `identical keys`. A `faster algorithm` results by 
+`modifying binary search` to `search for the boundary` of the block 
+`containing k`, instead of `k itself`. Suppose we delete the equality 
+test
+> if (s[middle] == key) return(middle);
+
+from the implementation above and return the `index low` instead of `−1` 
+on each `unsuccessful search`.
+`All searches` will now be `unsuccessful`, since there is `no equality
+test`. The `search` will `proceed to the right half` whenever the key is 
+compared to `an identical array element`, eventually terminating at the 
+`right boundary`.
+`Repeating the search` after `reversing the direction` of the `binary 
+comparison` will lead us to the `left boundary`.
+Each search takes `O(lg n)` time, so we can `count the occurrences` in
+`logarithmic time` `regardless of the size` of the block.
+
+**Note**: This method is tested but why this is working is not logical
+enough.
+
+
+[Table of contents](#table_of_contents)
+
+### <a name='one_sided_binary_search'></a> One-Sided Binary Search
+
+Now suppose we have an `array A` consisting of a `run of 0’s`, followed 
+by `an unbounded run of 1’s`, and would like to `identify the exact point` 
+of `transition` between them. `Binary search` on the array would provide 
+the `transition point` in `Math.ceil(lg n)` tests, if we had a `bound n` 
+on the `number of elements` in the array. In the `absence` of such a bound, 
+we can `test repeatedly` at `larger intervals` `(A[1], A[2], A[4], A[8], 
+A[16],. . .)` until we find a `first nonzero value`. Now we have a `window 
+containing the target` and can `proceed with binary search`. This 
+`one-sided binary search` finds the `transition point p` using at most 
+`2 Math.ceil(lg p)` comparisons, `regardless` of `how large` the array 
+actually is. `One-sided binary search` is most useful whenever we are 
+looking for `a key that lies close to our current position`.
+
+### <a name='square_and_other_roots'></a> Square and Other Roots
+
+The `square root` of `n` is the number `r` such that r<sup>2</sup> = n. 
+`Square root` computations are performed inside every pocket calculator, 
+but it is instructive to develop an efficient algorithm to compute them.
+
+First, observe that the `square root of n ≥ 1` must be `at least 1` and 
+`at most n`. Let `l = 1` and `r = n`. Consider the `midpoint` of this 
+interval, `m = (l + r)/2`. How does **m<sup>2</sup>** compare to `n`? 
+If **n ≥ m<sup>2</sup>** , then the `square root` must be `greater than m`, 
+so the algorithm repeats with `l = m`. If **n < m<sup>2</sup>** , then the 
+`square root must be less than m`, so the algorithm repeats with `r = m`. 
+Either way, we have halved the interval using only one comparison. 
+Therefore, after `lg n` rounds we will have identified the square root 
+to `within ±1`.
+
+This `bisection method`, as it is called in `numerical analysis`, can also 
+be applied to the `more general` problem of `finding the roots of an 
+equation`. We say that `x` is a `root of the function f` if `f (x) = 0`. 
+Suppose that we start with values `l and r` such that `f (l) > 0` and 
+`f (r) < 0`. If `f` is a `continuous function`, there `must exist` a `root`
+`between l and r`. Depending upon the `sign of f (m)`, where 
+`m = (l + r)/2`, we can cut this window containing the root in `half` 
+with each test and stop soon as our estimate becomes 
+`sufficiently accurate`.
+
+`Root-finding` algorithms that `converge faster` than `binary search` are 
+`known for both of these problems`. Instead of always testing the midpoint 
+of the interval, these `algorithms interpolate to find a test point` 
+closer to the `actual root`. Still, `binary search` is `simple`, `robust`, 
+and works as well as possible without additional information on the 
+nature of the function to be computed.
+
+[Table of contents](#table_of_contents)
+
+### <a name='divide_and_conquer'></a> Divide-and-Conquer
+
+One of the `most powerful techniques` for solving problems is to `break 
+them down into smaller`, more `easily solved pieces`. `Smaller problems` 
+are `less overwhelming`, and they `permit us to focus on details` that are 
+lost when we are studying the `entire problem`. A `recursive algorithm` 
+starts to `become apparent` when we can `break the problem` into 
+`smaller instances` of the `same type of problem`. Effective `parallel
+processing` requires decomposing jobs into at least as many tasks as 
+processors, and is becoming more important with the advent of 
+cluster computing and multi-core processors.
+
+Two `important algorithm design paradigms` are based on `breaking problems
+down into smaller problems`. We will see `dynamic programming`,
+which typically 
+- removes one element from the problem, 
+- solves the smaller problem, 
+- and then uses the solution to this smaller problem to add back the 
+  element in the proper way. 
+
+`Divide-and-conquer` instead 
+- splits the problem in `(say) halves`, 
+- solves each half, 
+- then stitches the pieces back together to form a full solution.
+
+To use `divide-and-conquer` as an algorithm design technique, we must 
+- divide the problem into two smaller sub-problems, 
+- solve each of them recursively, 
+- and then meld the two partial solutions into one solution to the full problem. 
+
+`Whenever the merging takes less time than solving the two sub-problems`, 
+we get an `efficient algorithm`. `MergeSort`, is the classic example of
+a `divide-and-conquer` algorithm. It takes only `linear time` to `merge 
+two sorted lists of n/2 elements`, each of which was obtained in 
+`O(n lg n)` time.
+
+`Divide-and-conquer` is a design technique with many `important algorithms` 
+to its credit, including `mergesort`, `the fast Fourier transform`, 
+and `Strassen’s matrix multiplication` algorithm. Beyond `binary search` 
+and `its many variants`, however, We may find it to be a `difficult design 
+technique to apply in practice`. Our `ability to analyze` 
+`divide-and-conquer` algorithms `rests on our strength` to `solve the 
+asymptotics of recurrence relations` `governing the cost of such` 
+`recursive algorithms`.
+
+[Table of contents](#table_of_contents)
+
+
+### <a name='recurrence_relations'></a> Recurrence Relations
+
+Many `divide-and-conquer` algorithms have time complexities that are 
+naturally modeled by `recurrence relations`. Evaluating such recurrences 
+is important to understanding when `divide-and-conquer` `algorithms` 
+`perform well`, and provide an `important tool` for `analysis in general`. 
+The reader who balks at the very idea of analysis is free to skip this 
+section, but there are `important insights` into `design` that come from 
+an `understanding of the behavior` of `recurrence relations`.
+
+What is a `recurrence relation`? It is an `equation that is defined in 
+terms of itself`. `The Fibonacci numbers` are described by the recurrence 
+relation F<sub>n</sub> = F<sub>n−1</sub> + F<sub>n−2</sub>. Many other 
+natural functions are `easily expressed as recurrences`. `Any polynomial` 
+can be `represented by a recurrence`, such as the `linear function`:
+
+> a<sub>n</sub> = a<sub>n−1</sub> + 1, a<sub>1</sub> = 1 => a<sub>n</sub> = n
+
+Any exponential can be represented by a recurrence:
+> a<sub>n</sub> = 2a<sub>n−1</sub> , a<sub>1</sub> = 1 => a<sub>n</sub> = 2<sup>n−1</sup>
+
+Finally, lots of `weird functions` that `cannot be described easily` 
+with `conventional notation` can be represented by a `recurrence`:
+
+> a<sub>n</sub> = na<sub>n−1</sub> , a<sub>1</sub> = 1 => a<sub>n</sub> = n!
+
+This means that `recurrence relations` are a `very versatile` way to 
+`represent functions`.
+
+The `self-reference` property of `recurrence relations` is shared with 
+`recursive programs` or `algorithms`, as the `shared roots of both 
+terms reflect`. Essentially, `recurrence relations` provide a way to 
+analyze `recursive structures`, such as `algorithms`.
+
+
+[Table of contents](#table_of_contents)
+
+### <a name='divide_and_conquer_recurrences'></a> Divide-and-Conquer Recurrences
+
+`Divide-and-conquer` algorithms tend to `break a given problem` into 
+`some number of smaller pieces (say a)`, each of which is of `size n/b`. 
+Further, they spend `f(n) time` to combine these sub-problem solutions 
+into a `complete result`. Let `T(n)` denote the worst-case time the 
+algorithm takes to solve a problem of `size n`. Then `T(n)` is given by 
+the following `recurrence relation`:
+> T(n) = a T(n/b) + f(n)
+
+Consider the following examples:
+- `Sorting` – The running time behavior of `mergesort` is governed by the 
+  recurrence `T(n) = 2T(n/2) + O(n)`, since the algorithm divides the data 
+  into `equal-sized` halves and then spends `linear time` `merging the 
+  halves` after they are `sorted`. In fact, this `recurrence` evaluates 
+  to `T(n) = O(n lg n)`, just as we got by our previous analysis.
+
+- `Binary Search` – The running time behavior of `binary search` is 
+  governed by the recurrence `T(n) = T(n/2) + O(1)`, since at each step 
+  we spend `constant time` to reduce the problem to an instance half its 
+  size. In fact, this recurrence evaluates to `T(n) = O(lg n)`, just as 
+  we got by our previous analysis.
+  
+- `Fast Heap Construction` – The `bubble down` method of `heap construction`
+  built an `n-element` heap by constructing two `n/2 element` heaps and 
+  then `merging` them with the `root` in `logarithmic time`. This argument 
+  reduces to the `recurrence relation` `T(n) = 2T(n/2) + O(lg n)`. In
+  fact, this recurrence evaluates to `T(n) = O(n)`, just as we got by our 
+  previous analysis.
+  
+- `Matrix Multiplication` – The standard `matrix multiplication` algorithm 
+  for two `n × n` matrices takes **O(n<sup>3</sup>)**, because we
+  compute the `dot product of n` terms for each of the **n<sup>2</sup>** 
+  elements in the product matrix.  
+  However, `Strassen` discovered a `divide-and-conquer` algorithm that
+  manipulates the products of `seven n/2 × n/2` matrix products to yield 
+  the product of `two n × n matrices`. This yields a time-complexity 
+  recurrence **T(n) = 7T(n/2) + O(n<sup>2</sup>)**. In fact, this 
+  recurrence evaluates to **T(n) = O(n<sup>2.81</sup>)**, which seems 
+  impossible to predict without solving the recurrence.
+  
+[Table of contents](#table_of_contents)
+
+### <a name='solving_divide_and_conquer_recurrences'></a> Solving Divide-and-Conquer Recurrences
+
+In fact, `divide-and-conquer` recurrences of the form `T(n) = aT(n/b) + f(n)` 
+are generally `easy to solve`, because the solutions typically fall into 
+one of `three distinct cases`:
+
+1. If f(n) = O(n<sup>log<sub>b</sub> a−e</sup> ) for some constant e > 0, then **T(n) = Θ(n<sup>log<sub>b</sub> a</sup>)**.
+2. If f(n) = Θ(n<sup>log<sub>b</sub> a</sup> ), then **T(n) = Θ(n<sup>log<sub>b</sub> a</sup> lg n)**.
+3. If f(n) = Ω(n<sup>log<sub>b</sub> a+e</sup> ) for some constant e > 0, and if 
+   `af(n/b) ≤ cf(n)` for some c < 1, then `T(n) = Θ(f(n))`.
+   
+Although this looks somewhat frightening, it really isn’t difficult to 
+apply. The issue is `identifying` which case of the so-called `master 
+theorem` holds for your given recurrence.
+
+- `Case 1` holds for `heap construction` and `matrix multiplication`, while
+- `Case 2` holds `mergesort` and `binary search`. 
+- `Case 3` generally arises for clumsier algorithms, where the cost of 
+  combining the sub-problems dominates everything.
+  
+The `master theorem` can be thought of as a `black-box` piece of machinery, 
+invoked as needed and left with its mystery intact. However, with a little 
+study, the reason why the master theorem works can become apparent.
+
+Below Figure shows the recursion tree associated with a typical 
+`T(n) = aT(n/b) + f(n)` `divide-and-conquer` algorithm. `Each problem` of 
+`size n` is `decomposed` into a `problems of size n/b`. `Each sub-problem` 
+of `size k` takes `O(f(k))` time to deal with `internally`, `between 
+partitioning` and `merging`. The total time for the algorithm is the `sum` 
+of `these internal costs`, `plus the overhead of building the recursion 
+tree`. The `height of this tree` is **h = log<sub>b</sub>n** and the 
+number of leaf nodes **a<sup>h</sup> = a<sup>log<sub>b</sub>n</sup>** ,
+which happens to simplify to **n<sup>log<sub>b</sub>a</sup>** with some 
+algebraic manipulation.
+
+The `three cases` of the `master theorem` correspond to `three different 
+costs` which might be `dominant` as a function of `a, b, and f(n)`:
+- `Case 1`: `Too many leaves` – If the number of `leaf nodes` outweighs 
+  the `sum of the internal evaluation cost`, the total running time is 
+  **O(n<sup>log<sub>b</sub>a</sup>)**.  
+  **Note**: It means no of children will be more than the size in which
+  they got divided. (ex: 4 children of size = n/2)
+
+- `Case 2: Equal work per level` – As we `move down the tree`, each problem
+  gets `smaller` but there are `more of them to solve`. If the `sum of the 
+  internal evaluation costs` at `each level` are `equal`, the `total 
+  running time` is the `cost per level` **(n<sup>log<sub>b</sub> a</sup>)** 
+  times the number of levels **(log<sub>b</sub> n)**, for a total 
+  running time of **O(n<sup>log<sub>b</sub>a</sup> lg n)**.
+  **Note**: When the number of children and their size are equal. 
+  (ex: children = 2 and size = n/2, binary-search)
+  
+- `Case 3: Too expensive a root` – If the `internal evaluation costs` grow 
+  `rapidly enough with n`, then the `cost of the root evaluation` may 
+   `dominate`. If so, the the `total running time` is `O(f(n))`.
+
+![master_theorem](../images/master_theorem.jpg)
+
 
 ### <a name='important_questions'></a> Important Questions
 - How many binary tree can be formed using `n` nodes?
