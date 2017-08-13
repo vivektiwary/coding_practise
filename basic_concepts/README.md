@@ -34,6 +34,20 @@
         1. [Recurrence Relations](#recurrence_relations)
         2. [Divide-and-Conquer Recurrences](#divide_and_conquer_recurrences)
         3. [Solving Divide-and-Conquer Recurrences](#solving_divide_and_conquer_recurrences)
+3. [Graph Traversal](#graph_traversal)
+    1. [Flavors of Graphs](#flavors_of_graph)
+    2. [Friendship Graph](#friendship_graph)
+    3. [Data Structures for Graphs](#data_structures_for_graphs)
+    4. [Traversing a Graph](#traversing_a_graph)
+    5. [Breadth-First Search](#breadth_first_search)
+        1. [Exploiting Traversal](#exploiting_traversal)
+        2. [Finding Paths](#finding_paths)
+    6. [Application of Breadth First Search](#application_of_breadth_first_search)
+        1. [Connected Components](#connected_components)
+        2. [Two Coloring Graphs](#two_coloring_graphs)
+    7. [Depth-First Search](#depth_first_search)
+    8. [Application of Depth-First Search](#application_of_depth_first_search)
+        1. [Finding Cycles](#finding_cycles)
 3. [Important Questions](#important_questions)
 4. [Problems Wiki](#problem_wiki)
 4. [Data Structures and Concepts](#important_data_structures_and_concepts)
@@ -1460,6 +1474,992 @@ costs` which might be `dominant` as a function of `a, b, and f(n)`:
    `dominate`. If so, the the `total running time` is `O(f(n))`.
 
 ![master_theorem](../images/master_theorem.jpg)
+
+
+[Table of contents](#table_of_contents)
+
+### <a name='graph_traversal'></a> Graph Traversal
+
+Graphs are one of the unifying themes of computer science—an `abstract 
+representation` that describes `the organization of transportation systems`, 
+`human interactions`, and `telecommunication networks`. That so many 
+different structures can be modeled using a single formalism is a source 
+of great power to the educated programmer.
+
+More precisely, a graph `G = (V, E)` consists of `a set of vertices V` 
+together with `a set E of vertex pairs or edges`. Graphs are important 
+because they can be used to represent essentially any relationship. 
+For example, graphs can model `a network of roads`, with `cities as 
+vertices` and `roads between cities as edges`. `Electronic circuits` can 
+also be `modeled as graphs`, with `junctions as vertices` and `components 
+as edges`.
+
+The key to solving many algorithmic problems is to think of them in terms
+of `graphs`. `Graph theory` provides a `language` for talking about the 
+properties of relationships, and it is amazing how often `messy applied 
+problems` have a `simple description` and `solution` in terms of 
+classical `graph properties`.
+
+`Designing truly novel graph algorithms is a very difficult task`. The key 
+to using `graph algorithms effectively` in applications lies in `correctly 
+modeling` your `problem` so you can take `advantage of existing algorithms`. 
+Becoming familiar with many different algorithmic graph problems is `more 
+important` than understanding the details of particular `graph algorithms`.
+
+[Table of contents](#table_of_contents)
+
+### <a name='flavors_of_graph'></a> Flavors of Graphs
+
+A graph `G = (V, E)` is defined on `a set of vertices V` , and contains 
+`a set of edges E` of `ordered or unordered pairs` of vertices from `V` . 
+In modeling a `road network`, the `vertices` may `represent the cities 
+or junctions`, certain pairs of which are `connected by roads/edges`. 
+In analyzing the `source code` of a `computer program`, the `vertices`
+may `represent lines of code`, with an `edge connecting lines x and y` 
+if `y is the next statement executed after x`. In analyzing human 
+interactions, the `vertices` typically represent `people`, with 
+`edges connecting pairs of related souls`.
+
+`Several fundamental properties of graphs` `impact the choice` of the 
+data structures used to `represent them` and `algorithms available` to 
+analyze them. The `first step` in any `graph problem` is determining 
+the `flavors of graphs` you are dealing with:
+- `Undirected` vs. `Directed` – A graph `G = (V, E)` is `undirected` 
+  `if edge (x, y) ∈ E` `implies that (y, x)` is also in `E`. If not, we say that the graph is directed. Road
+  networks between cities are typically undirected, since any large road has
+  lanes going in both directions. Street networks within cities are almost always
+  directed, because there are at least a few one-way streets lurking somewhere.
+  Program-flow graphs are typically directed, because the execution flows from
+  one line into the next and changes direction only at branches. Most graphs
+  of `graph-theoretic` interest are `undirected`.
+
+- `Weighted` vs. `Unweighted` – Each `edge` (or `vertex`) in a `weighted 
+  graph` `G` is assigned a `numerical value`, or `weight`. The edges of a 
+  road network graph might be weighted with their `length, drive-time, or 
+  speed limit`, depending upon the application. 
+  In `unweighted graphs`, there is `no cost distinction` between various
+  `edges` and `vertices`.
+  The difference between `weighted and unweighted` graphs becomes 
+  particularly apparent in finding the `shortest path` between two 
+  vertices. For `unweighted graphs`, the shortest path must have the 
+  `fewest number of edges`, and can be found using a `breadth-first 
+  search` as discussed in this chapter. `Shortest paths` in `weighted 
+  graphs` requires more `sophisticated algorithms`.
+  
+- `Simple` vs. `Non-simple` – Certain types of `edges` `complicate` 
+  the `task of working with graphs`. A `self-loop` is an `edge (x, x)` 
+  involving only `one vertex`. An `edge(x, y)` is a `multi-edge` if it 
+  occurs `more than once` in the graph.
+  `Both of these structures` require `special care` in `implementing 
+  graph algorithms`. Hence `any graph` that avoids them is called 
+  `simple`.
+  
+- `Sparse` vs. `Dense`: Graphs are `sparse` when only a `small fraction` 
+  of the `possible vertex pairs` ( <sub>n</sub>C<sub>2</sub> for a simple, 
+  `undirected graph` on `n vertices`) actually have `edges` defined 
+  between them. Graphs where a `large fraction` of the `vertex pairs`
+  define `edges` are called `dense`. There is no official boundary between 
+  what is called `sparse` and what is called `dense`, but typically 
+  `dense graphs` have a `quadratic number of edges`, while sparse graphs 
+  are `linear in size`.
+  
+  `Sparse graphs` are usually `sparse` for `application-specific` reasons. 
+  Road networks must be `sparse graphs` because of `road junctions`. The 
+  most ghastly intersection I’ve ever heard of was the endpoint of only 
+  `seven different roads`. Junctions of `electrical components` are 
+  similarly limited to the number of wires that can meet at a point, 
+  perhaps except for power and ground.
+
+- `Cyclic` vs. `Acyclic` – An `acyclic graph` does not contain any `cycles`. 
+  Trees are `connected`, `acyclic undirected graphs`. Trees are the simplest 
+  interesting graphs, and are inherently `recursive structures` because 
+  `cutting any edge` leaves two smaller trees.
+  
+  `Directed acyclic graphs` are called `DAGs`. They arise `naturally` in 
+  `scheduling problems`, where a `directed edge (x, y)` indicates that 
+  `activity x` must occur `before y`. An operation called `topological 
+  sorting` orders the `vertices` of a `DAG` to respect these `precedence 
+  constraints`. `Topological sorting` is `typically` the `first step` 
+  of `any algorithm` on a `DAG`.
+  
+- `Embedded` vs. `Topological` – A graph is `embedded` if the `vertices 
+  and edges` are `assigned geometric positions`. Thus, any `drawing` of a 
+  graph is an `embedding`, which may or may not have `algorithmic 
+  significance`.
+  
+  Occasionally, the `structure` of a graph is completely defined by the 
+  `geometry of its embedding`. For example, if we are given a collection 
+  of points in the plane, and seek the `minimum cost tour` visiting all 
+  of them (i.e., the `traveling salesman problem`), the underlying 
+  `topology` is the `complete graph` connecting each pair of vertices. 
+  The `weights` are typically defined by the `Euclidean distance` between 
+  each pair of points.
+  
+  `Grids of points` are another example of `topology from geometry`. 
+  Many problems on an `n × m grid` involve walking between neighboring 
+  points, so the edges are implicitly defined from the geometry.
+  
+- `Implicit` vs. `Explicit` – Certain graphs are not `explicitly constructed` 
+  and then `traversed`, but `built as we use them`. A good example is in 
+  `backtrack search`. The `vertices` of this `implicit search graph` are 
+  the `states` of the `search vector`, while `edges` `link pairs of states` 
+  that can be directly generated from each other. Because you do not have 
+  to `store the entire graph`, it is often `easier to work` with an 
+  `implicit graph` than `explicitly construct it` prior to `analysis`.
+  
+- `Labeled` vs. `Unlabeled` – Each `vertex` is assigned a `unique name` 
+  or `identifier` in a `labeled graph` to distinguish it from all other 
+  vertices. In `unlabeled graphs`, no such distinctions have been made.
+  
+  `Graphs` arising in applications are often `naturally and meaningfully` 
+  `labeled`, such as `city names` in a `transportation network`. A common 
+  problem is that of `isomorphism testing`—determining whether the 
+  `topological structure` of `two graphs` are `identical` if we `ignore` 
+  any `labels`. Such problems are typically solved using `backtracking`, 
+  by trying to `assign` each vertex in each graph a label such that the 
+  `structures are identical`.
+  
+[Table of contents](#table_of_contents)
+
+### <a name='friendship_graph'></a> Friendship Graph
+
+To demonstrate the importance of `proper modeling`, let us consider a 
+graph where the `vertices are people`, and there is an `edge` between 
+two people `if and only if` they are `friends`. Such graphs are called 
+`social networks` and are well defined on any set of people—be they the 
+people in your neighborhood, at your school/business, or even spanning 
+the entire world. An entire science analyzing `social networks` has
+sprung up in recent years, because many interesting aspects of people 
+and their behavior are best understood as properties of this `friendship 
+graph`.
+
+[Table of contents](#table_of_contents)
+
+### <a name='data_structures_for_graphs'></a> Data Structures for Graphs
+
+Selecting the right graph data structure can have an `enormous impact` 
+on `performance`. Your two basic choices are `adjacency matrices` and 
+`adjacency lists`. We assume the graph `G = (V, E)` contains `n` vertices 
+and `m` edges.
+
+- `Adjacency Matrix`: We can represent `G` using an `n × n` matrix `M` , 
+where element `M [i, j] = 1` `if (i, j) is an edge of G`, and `0` if it 
+isn’t. This allows `fast answers` to the question `is (i, j) in G?`, and 
+`rapid updates` for `edge insertion` and `deletion`. It may use 
+`excessive space` for `graphs` with `many vertices` and relatively 
+`few edges`, however.
+
+| Comparision                             |   Winner                            |
+|:----------------------------------------|------------------------------------:|
+|Faster to test if (x, y) is in graph?    |adjacency matrices                   |
+|Faster to find the degree of a vertex?   |adjacency lists                      |
+|Less memory on small graphs?             |adjacency lists (m + n) vs. (n<sup>2</sup>)|
+|Less memory on big graphs?               |adjacency matrices (a small win)     |
+|Edge insertion or deletion?              |adjacency matrices O(1) vs. O(d)     |
+|Faster to traverse the graph?            |adjacency lists Θ(m + n) vs. Θ(n<sup>2</sup>) |
+|Better for most problems?                |adjacency lists                      |
+
+
+Consider a graph that represents the `street map of Manhattan` in New York
+City. Every junction of `two streets` will be a `vertex` of the graph. 
+Neighboring `junctions` are connected by `edges`. How big is this graph? 
+Manhattan is basically a grid of `15 avenues` each crossing roughly `200 
+streets`. This gives us about `3,000 vertices` and `6,000 edges`, 
+since `each vertex` `neighbors` `four other
+vertices` and `each edge` is shared between `two vertices`. This modest 
+amount of data should easily and efficiently be stored, yet an 
+adjacency matrix would have `3,000 × 3,000 = 9,000,000` cells, almost 
+all of them `empty`!
+
+There is some potential to `save space` by `packing multiple bits` per `word`
+or `simulating` a `triangular matrix` on `undirected graphs`. But these 
+methods lose the `simplicity` that makes `adjacency matrices` so 
+`appealing` and, more critically, remain inherently `quadratic on sparse 
+graphs`.
+
+- `Adjacency Lists`: We can more efficiently represent `sparse graphs` by 
+  using `linked lists` to `store` the `neighbors` adjacent to each `vertex`. 
+  `Adjacency lists` require `pointers` but are `not frightening` once you 
+  have experience with `linked structures`.
+  
+  `Adjacency lists` make it `harder to verify` whether a given `edge (i, j)` 
+  is in `G`, since we must `search through` the `appropriate list` to find 
+  the `edge`. However, it is `surprisingly easy` to `design graph algorithms` 
+  that `avoid` any need for `such queries`. Typically, we `sweep through` 
+  all the `edges` of the graph in `one pass` via a `breadth-first` or 
+  `depth-first` traversal, and `update the implications` of the `current 
+  edge` as we visit it.
+  
+**Note**: `Adjacency lists` are the `right data structure` for most
+          applications of graphs.
+
+
+We will use `adjacency list` as the data structure for graph. We represent
+a graph using the following data type. For each graph, we keep a `count` of 
+the `number of vertices`, and assign `each vertex` a `unique identification`
+number from `1` to `nvertices`.
+
+```c
+#define MAXV            1000 /* maximum number of vertices */
+
+typedef struct {
+    int y;                      /* adjacency info */
+    int weight;                 /* edge weight, if any */
+    struct edgenode *next;      /* next edge in list */
+} edgenode;
+
+
+typedef struct {
+    edgenode *edges[MAXV+1];     /* adjacency info */
+    int degree[MAXV+1];          /* outdegree of each vertex */
+    int nvertices;               /* number of vertices in graph */
+    int nedges;                  /* number of edges in graph */
+    bool directed;               /* is the graph directed? */
+} graph;
+```
+We represent `directed edge (x, y)` by an `edgenode y` in `x’s` 
+`adjacency list`. The `degree field` of the `graph` `counts` the 
+`number` of `meaningful entries` for the given `vertex`. An `undirected 
+edge (x, y)` appears `twice` in any `adjacency-based graph structure`,
+once as `y in x’s list`, and once as `x in y’s list`. The `boolean flag` 
+`directed` identifies whether the given `graph` is to be `interpreted` 
+as `directed` or `undirected`.
+
+To demonstrate the use of this data structure, we show how to `read` a 
+`graph from a file`. A typical graph format consists of an initial line 
+featuring the number of `vertices and edges` in the graph, followed by a 
+listing of the `edges at one vertex` per line.
+```c
+initialize_graph(graph *g, bool directed)
+{
+    int i;                              /* counter */
+    
+    g -> nvertices = 0;
+    g -> nedges = 0;
+    g -> directed = directed;
+    
+    for (i=1; i<=MAXV; i++) g->degree[i] = 0;
+    for (i=1; i<=MAXV; i++) g->edges[i] = NULL;
+}
+```
+
+Actually reading the graph requires `inserting` each 
+`edge` into this structure:
+
+```c
+read_graph(graph *g, bool directed)
+{
+    int i;                      /* counter */
+    int m;                      /* number of edges */
+    int x, y;                   /* vertices in edge (x,y) */
+    
+    initialize_graph(g, directed);
+    
+    scanf("%d %d",&(g->nvertices),&m);
+    
+    for (i=1; i<=m; i++) {
+        scanf("%d %d",&x,&y);
+        insert_edge(g,x,y,directed);
+    }
+}
+```
+
+The critical routine is `insert edge`.
+The new `edgenode` is inserted at the beginning of the appropriate 
+`adjacency list`, since `order doesn’t matter`. We `parameterize`
+our `insertion` with the `directed Boolean flag`, to `identify` whether 
+we need to `insert two copies` of each `edge` or only `one`. Note the 
+use of `recursion` to solve this problem:
+```c
+insert_edge(graph *g, int x, int y, bool directed)
+{
+    edgenode *p;                    /* temporary pointer */
+    
+    p = malloc(sizeof(edgenode));   /* allocate edgenode storage */
+    
+    p->weight = NULL;
+    p->y = y;
+    p->next = g->edges[x];
+    
+    g->edges[x] = p;                /* insert at head of list */
+    
+    g->degree[x] ++;
+
+    if (directed == FALSE)
+        insert_edge(g,y,x,TRUE);
+    else
+        g->nedges ++;
+}
+```
+
+`Printing` the `associated graph` is just a matter of `two nested loops`, 
+one through `vertices`, the other through `adjacent edges`:
+
+```c
+print_graph(graph *g)
+{
+    int i;                      /* counter */
+    edgenode *p;                /* temporary pointer */
+
+    for (i=1; i<=g->nvertices; i++) {
+        printf("%d: ",i);
+        p = g->edges[i];
+        while (p != NULL) {
+            printf(" %d",p->y);
+            p = p->next;
+        }
+        printf("\n");
+    }
+}
+```
+
+It is a good idea to use a well-designed graph data type as a model for building
+your own, or even better as the foundation for your application.
+We recommend `LEDA` or `Boost` as the `best-designed` `general-purpose` 
+`graph data structures` currently available. They may be `more powerful` 
+(and hence somewhat `slower/larger`) than you need, but they do `so many 
+things right` that you are likely to `lose` `most of the potential 
+do-it-yourself benefits` through `clumsiness`.
+
+[Table of contents](#table_of_contents)
+
+### <a name='traversing_a_graph'></a> Traversing a Graph
+
+Perhaps the most fundamental `graph problem` is to `visit every edge
+and vertex` in a `graph` in a `systematic way`. Indeed, all the basic 
+bookkeeping operations on graphs (such `printing` or `copying graphs`, 
+and `converting between alternate representations`) are applications of 
+`graph traversal`.
+
+`Mazes` are naturally represented by `graphs`, where each `graph vertex` 
+`denotes` a `junction of the maze`, and each `graph edge` denotes a 
+`hallway in the maze`. Thus, any `graph traversal` algorithm must be 
+powerful enough to get us `out of an arbitrary maze`. For `efficiency`, 
+we must make sure `we don’t get trapped` in the maze and visit the `same 
+place` repeatedly. For `correctness`, we must do the `traversal` in a 
+`systematic way` to guarantee that we get `out of the maze`. 
+Our `search` must take us through every `edge and vertex` in the graph.
+
+The key idea behind `graph traversal` is to `mark each vertex` when we 
+`first visit` it and `keep track` of what we have not yet `completely 
+explored`. Although bread crumbs or unraveled threads have been used to 
+mark visited places in fairy-tale mazes, we will rely on `Boolean flags` 
+or `enumerated types`.
+
+Each vertex will exist in one of three states:
+- `undiscovered` – the vertex is in its initial, virgin state.
+
+- `discovered` – the vertex has been `found`, but we have `not` yet 
+  `checked` out all its `incident edges`.
+  
+- `processed` – the `vertex` after we have visited all its `incident edges`.
+
+Obviously, a vertex cannot be processed until after we discover it, so the 
+state of each `vertex` progresses over the course of the traversal from 
+`undiscovered` to `discovered` to `processed`.
+
+We must also `maintain` a `structure` containing the `vertices` that we 
+have `discovered but not yet completely processed`. Initially, only the 
+`single start vertex` is considered to be `discovered`. To completely 
+`explore a vertex v`, we must evaluate `each edge` leaving `v`. If an 
+`edge` goes to an `undiscovered vertex x`, we mark `x` `discovered` and 
+`add` it to the `list of work to do`. We `ignore` an `edge` that goes to a
+`processed vertex`, because further contemplation will tell us nothing 
+new about the graph. We can also `ignore` any edge going to a `discovered 
+but not processed vertex`, because the `destination` `already resides` 
+on the `list of vertices to process`.
+
+Each `undirected edge` will be considered `exactly twice`, once when 
+each of its `endpoints is explored`. `Directed edges` will be considered 
+`only once`, when exploring the `source vertex`.
+
+Every `edge` and `vertex` in the `connected component` must eventually 
+be `visited`. Why? Suppose that there exists a vertex `u` that remains 
+`unvisited`, whose `neighbor` `v` was `visited`. This neighbor `v` will 
+eventually be explored, after which we will `certainly` visit `u`. 
+Thus, we must find everything that is there to be found.
+
+[Table of contents](#table_of_contents)
+
+### <a name='breadth_first_search'></a> Breadth-First Search
+
+
+The basic `breadth-first search` algorithm is given below. At some point 
+during the course of a traversal, `every node` in the `graph` changes 
+state from `undiscovered` to `discovered`. In a `breadth-first search` of 
+an `undirected graph`, we `assign a direction` to `each edge`, from the 
+`discoverer u` to the `discovered v`. We thus denote `u` to be the
+`parent of v`. Since each node has `exactly one parent`, `except` for the 
+`root`, this defines a `tree` on the `vertices` of the `graph`. This tree, 
+illustrated below, defines a `shortest path` from the `root` to every 
+`other node` in the `tree`. This property makes `breadth-first search` 
+very useful in `shortest path problems`.
+
+![Breadth_first_search](../images/breadth_first_search.png)
+
+
+```c
+BFS(G, s)
+    for each vertex u ∈ V [G] − {s} do
+        state[u] = “undiscovered”
+        p[u] = nil, i.e. no parent is in the BFS tree
+    state[s] = “discovered”
+    p[s] = nil
+    Q = {s}
+    while Q != empty do
+        u = dequeue[Q]
+        process vertex u as desired
+        for each v ∈ Adj[u] do
+            process edge (u, v) as desired
+            if state[v] = “undiscovered” then
+                state[v] = “discovered”
+                p[v] = u
+                enqueue[Q, v]
+        state[u] = “processed”
+```
+
+The `graph edges` that do `not appear` in the `breadth-first search tree` 
+also have `special properties`. For `undirected graphs`, `non-tree edges` 
+can `point only to vertices` on the `same level as the parent vertex`, 
+or to vertices on the `level directly below the parent`. These properties 
+follow easily from the fact that `each path in the tree` must be the 
+`shortest path in the graph`. For a `directed graph`, a `back-pointing edge`
+`(u, v)` can exist whenever `v` lies closer to the `root` than `u` does.
+
+**Implementation**:
+
+Our `breadth-first search` implementation `bfs` uses `two Boolean arrays` 
+to maintain our `knowledge` about `each vertex in the graph`. A vertex is 
+`discovered` the `first time we visit it`. A `vertex` is considered 
+`processed` after we have `traversed` all `outgoing edges` from it. 
+Thus, each vertex passes from `undiscovered` to `discovered` to `processed`
+over the course of the search. This information could have been maintained 
+using one `enumerated type` variable, but we used `two Boolean variables` 
+instead.
+
+```c
+bool processed[MAXV+1];             /* which vertices have been processed */
+bool discovered[MAXV+1];            /* which vertices have been found */
+int parent[MAXV+1];                 /* discovery relation */
+```
+Each vertex is initialized as `undiscovered`:
+
+```c
+initialize_search(graph *g)
+{
+    int i;                              /* counter */
+    for (i=1; i<=g->nvertices; i++) {
+        processed[i] = discovered[i] = FALSE;
+        parent[i] = -1;
+    }
+}
+```
+
+Once a `vertex is discovered`, it is `placed on a queue`. Since we process 
+these vertices in `first-in, first-out` order, the `oldest vertices` are 
+`expanded first`, which are exactly those `closest to the root`:
+
+```c
+bfs(graph *g, int start)
+{
+    queue q;                        /* queue of vertices to visit */
+    int v;                          /* current vertex */
+    int y;                          /* successor vertex */
+    edgenode *p;                    /* temporary pointer */
+    
+    init_queue(&q);
+    enqueue(&q,start);
+    discovered[start] = TRUE;
+    
+    while (empty_queue(&q) == FALSE) {
+        v = dequeue(&q);
+        process_vertex_early(v);
+        processed[v] = TRUE;
+        p = g->edges[v];
+        while (p != NULL) {
+            y = p->y;
+            if ((processed[y] == FALSE) || g->directed)
+                process_edge(v,y);
+            if (discovered[y] == FALSE) {
+                enqueue(&q,y);
+                discovered[y] = TRUE;
+                parent[y] = v;
+            }
+            p = p->next;
+        }
+        process_vertex_late(v);
+    }
+}
+```
+[Table of contents](#table_of_contents)
+
+### <a name='exploiting_traversal'></a> Exploiting Traversal
+
+The exact behavior of `bfs` depends upon the functions `process_vertex_early()`, 
+`process_vertex_late()`, and `process_edge()`. Through these functions, we 
+can `customize` what the `traversal does` as it makes its official visit to 
+each edge and each vertex. Initially, we will do all of `vertex processing` 
+on `entry`, so `process_vertex_late()` returns without action:
+
+```c
+process_vertex_late(int v)
+{
+}
+```
+
+By setting the active functions to
+
+```c
+process_vertex_early(int v)
+{
+    printf("processed vertex %d\n",v);
+}
+```
+
+```c
+process_edge(int x, int y)
+{
+    printf("processed edge (%d,%d)\n",x,y);
+}
+```
+
+we print each `vertex and edge` `exactly once`. If we instead set 
+`process_edge` to
+```c
+process_edge(int x, int y)
+{
+    nedges = nedges + 1;
+}
+```
+
+we get an `accurate count` of the `number of edges`. Different algorithms 
+perform different actions on vertices or edges as they are encountered. 
+These functions give us the freedom to easily customize our response.
+
+[Table of contents](#table_of_contents)
+
+### <a name='finding_paths'></a> Finding Paths
+
+The `parent` array set within `bfs()` is very useful for finding interesting 
+paths through a graph. The `vertex` that `discovered vertex i` is defined 
+as `parent[i]`. `Every vertex` is `discovered` during the course of 
+traversal, so except for the root `every node has a parent`. The parent 
+relation defines a tree of discovery with the initial search node as the 
+root of the tree.
+
+Because `vertices` are `discovered in order of increasing distance` from the 
+`root`, this `tree` has a very `important property`. The `unique tree path` 
+from the `root to each node` `x ∈ V` uses the `smallest number of edges` 
+(or equivalently, intermediate nodes) possible on any `root-to-x` path in 
+the graph.
+
+We can `reconstruct this path` by following the `chain of ancestors` from 
+`x` to the `root`. Note that we have to `work backward`. We `cannot find` 
+the `path` from the `root` to `x`, since `that does not follow` the 
+direction of the `parent pointers`. Instead, we must find the path 
+from `x` to the `root`. Since this is the `reverse` of how we normally
+want the path, we can either 
+- store it and then explicitly reverse it using a `stack`, or
+- let `recursion reverse` it for us, as follows:
+
+```c
+find_path(int start, int end, int parents[])
+{
+    if ((start == end) || (end == -1))
+        printf("\n%d",start);
+    else {
+        find_path(start,parents[end],parents);
+        printf(" %d",end);
+    }
+}
+```
+On our breadth-first search graph example (Figure 5.9) our algorithm generated
+the following parent relation:
+
+|vertex|   1 | 2   |  3  | 4   |  5  |  6  |
+|:---: |:---:|:---:|:---:|:---:|:---:|:---:|
+|parent|-1   |  1  | 2   | 5   | 1   |  1  |
+
+
+![breadth_first_search](../images/breadth_first_search.png)
+
+For the shortest path from 1 to 4, upper-right corner, this parent relation yields
+the path {1, 5, 4}.
+
+There are `two points` to remember when using `breadth-first search` to 
+find a `shortest path` from `x to y`: 
+- First, the `shortest path tree` is only useful if `BFS` was `performed` 
+  with `x` as the `root of the search`. 
+- Second, `BFS` gives the `shortest path` only if the `graph is unweighted`.
+
+
+[Table of contents](#table_of_contents)
+
+### <a name='application_of_breadth_first_search'></a> Application of Breadth-First Search
+
+Most elementary graph algorithms make `one or two traversals` of the graph 
+while we update our knowledge of the graph. Properly implemented using 
+`adjacency lists`, any such algorithm is destined to be `linear`, since 
+`BFS` runs in `O(n + m)` time on both `directed` and `undirected` graphs. 
+This is `optimal`, since it is `as fast as` one can hope to read any 
+`n-vertex`, `m-edge` graph.
+
+### <a name='connected_components'></a> Connected Components
+The `six degrees of separation` theory argues that there is always a short 
+path linking every `two people` in the world. We say that a graph is 
+`connected` if there is a `path` between any `two vertices`. If the 
+theory is true, it means the `friendship graph` must be `connected`.
+
+A `connected component` of an `undirected graph` is a `maximal set of 
+vertices` such that `there is a path between every pair of vertices`. The 
+`components` are `separate “pieces”` of the graph such that there is `no 
+connection` between the `pieces`. If we envision `tribes` in `remote parts` 
+of the world that have `yet not been encountered`, each such `tribe` would 
+`form a separate connected component` in the `friendship graph`.
+A `remote hermit`, or `extremely unpleasant` fellow, would represent a 
+connected component of one vertex.
+
+An amazing number of seemingly complicated problems reduce to `finding or
+counting connected components`. For example, testing whether a puzzle such 
+as Rubik’s cube or the 15-puzzle can be solved from any position is really 
+asking whether the graph of legal configurations is connected.
+
+`Connected components` can be found using `breadth-first search`, since the 
+`vertex order` does not matter. We start from the `first vertex`. Anything 
+we discover during this search must be part of the same `connected 
+component`. We then repeat the search from any `undiscovered vertex` 
+(if one exists) to define the `next component`, and so on until all 
+vertices have been found:
+
+```c
+connected_components(graph *g)
+{
+    int c;                      /* component number */
+    int i;                      /* counter */
+    
+    initialize_search(g);
+    
+    c = 0;
+    for (i=1; i<=g->nvertices; i++)
+        if (discovered[i] == FALSE) {
+            c = c+1;
+            printf("Component %d:",c);
+            bfs(g,i);
+            printf("\n");
+    }
+}
+
+
+
+process_vertex_early(int v)
+{
+    printf(" %d",v);
+}
+
+process_edge(int x, int y)
+{
+}
+```
+
+Observe how we increment a counter `c` denoting the `current component number`
+with each call to `bfs`. We could have explicitly bound each vertex to its 
+component number (instead of printing the vertices in each component) by 
+changing the action of `process_vertex`.
+
+There are `two distinct notions` of connectivity for `directed graphs`, 
+leading to algorithms for finding both `weakly connected` and 
+`strongly connected` components. Both of these can be found in `O(n + m)` 
+time.
+
+[Table of contents](#table_of_contents)
+
+### <a name='two_coloring_graphs'></a> Two-Coloring Graphs
+
+The `vertex-coloring` problem seeks to assign a `label` (or color) to 
+each `vertex` of a `graph` such that `no edge links` any `two vertices` of 
+the `same color`. We can easily avoid all conflicts by assigning each 
+vertex a `unique color`. However, the goal is to `use as few colors as 
+possible`. `Vertex coloring` problems often arise in `scheduling 
+applications`, such as `register allocation in compilers`.
+
+A graph is `bipartite` if it can be `colored` without `conflicts` while 
+using only `two colors`. `Bipartite` graphs are important because they 
+arise `naturally` in many applications. Consider the `had-sex-with` graph 
+in a `heterosexual world`. Men have sex only with women, and vice versa. 
+Thus, gender defines a legal `two-coloring`, in this simple model.
+
+But how can we find an appropriate `two-coloring` of a graph, thus 
+separating the men from the women? Suppose we assume that the starting 
+vertex is male. All vertices adjacent to this man must be female, 
+assuming the graph is indeed `bipartite`.
+
+We can augment `breadth-first search` so that whenever we discover a new 
+vertex, we `color it` the `opposite of its parent`. We check whether any 
+`non-discovery edge` links two vertices of the `same color`. Such a 
+`conflict` means that the graph cannot be `two-colored`. Otherwise, we 
+will have constructed a proper `two-coloring` whenever we terminate without 
+conflict.
+
+```c
+twocolor(graph *g)
+{
+    int i;                          /* counter */
+    
+    for (i=1; i<=(g->nvertices); i++)
+        color[i] = UNCOLORED;
+    
+    bipartite = TRUE;
+    
+    initialize_search(&g);
+    
+    for (i=1; i<=(g->nvertices); i++)
+        if (discovered[i] == FALSE) {
+            color[i] = WHITE;
+            bfs(g,i);
+        }
+}
+
+
+process_edge(int x, int y)
+{
+    if (color[x] == color[y]) {
+        bipartite = FALSE;
+        printf("Warning: not bipartite due to (%d,%d)\n",x,y);
+    }
+    color[y] = complement(color[x]);
+}
+
+complement(int color)
+{
+    if (color == WHITE) return(BLACK);
+    if (color == BLACK) return(WHITE);
+    
+    return(UNCOLORED);
+}
+
+```
+
+We can assign the first vertex in any `connected component` to be whatever
+`color/sex` we wish. `BFS` can separate the men from the women, but we 
+can’t tell them apart just by using the graph structure.
+
+[Table of contents](#table_of_contents)
+
+### <a name='depth_first_search'></a> Depth-First Search
+There are two primary graph traversal algorithms: `breadth-first search 
+(BFS)` and `depth-first search (DFS)`. For certain problems, it makes 
+absolutely `no difference` which you use, but in others the distinction 
+is crucial.
+
+The difference between `BFS` and `DFS` results is in the `order` in which 
+they `explore vertices`. This `order` depends completely upon the 
+`container data structure` used to store the `discovered` but `not 
+processed` vertices.
+
+- `Queue` – By `storing` the vertices in a `first-in, first-out (FIFO)` 
+  `queue`, we explore the `oldest unexplored vertices first`. Thus our 
+  `explorations` `radiate out slowly` from the `starting vertex`, 
+  defining a `breadth-first search`.
+  
+- `Stack` – By `storing` the vertices in a `last-in, first-out (LIFO)`
+  `stack`, we `explore` the `vertices by lurching(uncontrolled-movement) 
+  along a path`, `visiting` a `new neighbor` if one is `available`, and 
+  `backing up` only when we are `surrounded` by `previously discovered
+  vertices`. Thus, our explorations `quickly wander away` from our `starting 
+  point`, defining a `depth-first search`.
+
+Our implementation of `dfs` maintains a notion of `traversal time` for 
+each vertex. Our `time clock ticks` each time we `enter or exit` any 
+vertex. We keep track of the `entry and exit` times for each vertex.
+
+`Depth-first search` has a `neat` `recursive implementation`, which 
+eliminates the need to explicitly use a `stack`:
+
+```c
+DFS(G, u)
+    state[u] = “discovered”
+    process vertex u if desired
+    entry[u] = time
+    time = time + 1
+    for each v ∈ Adj[u] do
+        process edge (u, v) if desired
+        if state[v] = “undiscovered” then
+            p[v] = u
+            DFS(G, v)
+    
+    state[u] = “processed”
+    exit[u] = time
+    time = time + 1
+```
+
+The `time intervals` have interesting and useful properties with respect 
+to `depth-first search`:
+
+- `Who is an ancestor?` – Suppose that `x` is an `ancestor` of `y` in the 
+  `DFS` tree. This implies that we `must enter` `x before y`, since there 
+  is no way we can be born before our own father or grandfather! We also 
+  must `exit` `y` before we `exit` `x`, because the mechanics of `DFS` 
+  ensure we `cannot exit` `x` until after we have `backed up` from the 
+  `search` of `all its descendants`. Thus the time interval of `y` must 
+  be properly nested within ancestor `x`.
+  
+- `How many descendants?` – The difference between the `exit` and `entry` 
+  times for `v` tells us `how many` `descendents` `v` has in the `DFS tree`. 
+  The `clock` gets `incremented` on `each vertex entry` and `vertex exit`, 
+  so `half the time difference` denotes the `number of descendents of v`.
+  
+We will use these `entry` and `exit` times in several applications of 
+`depth-first search`, particularly `topological sorting` and 
+`biconnected/strongly-connected` components. We need to be able to take 
+separate actions on each `entry` and `exit`, thus motivating distinct 
+`process_vertex_early` and `process_vertex_late` routines called from 
+`dfs`.
+
+The other important property of a `depth-first search` is that it 
+`partitions` the `edges` of an `undirected graph` into `exactly two 
+classes`: `tree edges` and `back edges`. The `tree edges` discover `new 
+vertices`, and are those `encoded in the parent relation`. `Back edges` 
+are those whose `other endpoint` is an `ancestor of the vertex` being 
+`expanded`, so they `point back` into the `tree`.
+
+An amazing property of `depth-first search` is that all edges fall into 
+these `two classes`. Why can’t an edge go to a `brother` or `cousin node` 
+instead of an `ancestor`? `All nodes` reachable from a given `vertex v` 
+are `expanded` `before we finish` with the `traversal from v`, so such 
+topologies are `impossible for undirected graphs`. This `edge 
+classification` proves fundamental to the `correctness` of 
+`DFS-based algorithms`.
+
+**Implementation**:
+
+A `depth-first search` can be thought of as a `breadth-first search` 
+with a `stack` instead of a `queue`. The beauty of implementing `dfs` 
+`recursively` is that `recursion eliminates` the need to keep an 
+`explicit stack`:
+
+```c
+dfs(graph *g, int v)
+{
+    edgenode *p;                /* temporary pointer */
+    int y;                      /* successor vertex */
+    
+    if (finished) return;       /* allow for search termination */
+    
+    discovered[v] = TRUE;
+    time = time + 1;
+    entry_time[v] = time;
+    
+    process_vertex_early(v);
+    
+    p = g->edges[v];
+    while (p != NULL) {
+        y = p->y;
+        if (discovered[y] == FALSE) {
+            parent[y] = v;
+            process_edge(v,y);
+            dfs(g,y);
+        }
+        else if ((!processed[y]) || (g->directed))
+            process_edge(v,y);
+            
+        if (finished) return;
+            
+        p = p->next;
+    }
+        
+    process_vertex_late(v);
+    
+    time = time + 1;
+    exit_time[v] = time;
+    
+    processed[v] = TRUE;
+}
+```
+
+`Depth-first search` use essentially the same idea as `backtracking`.
+Both involve `exhaustively searching` `all possibilities` by advancing 
+if `it is possible`, and `backing up` `as soon as` there is `no unexplored 
+possibility` for `further advancement`. Both are most easily understood 
+as `recursive algorithms`.
+
+**NOTE**: `DFS` organizes vertices by `entry/exit` times, and edges into 
+`tree and back edges`. This organization is what gives `DFS` its `real 
+power`.
+
+
+[Table of contents](#table_of_contents)
+
+### <a name='application_of_depth_first_search'></a> Application of Depth-First Search
+As algorithm design paradigms go, a `depth-first search` isn’t particularly 
+intimidating. It is surprisingly `subtle`, however meaning that its 
+correctness requires getting details right.
+
+The `correctness` of a `DFS-based` algorithm depends upon specifics of 
+exactly `when we process` the `edges` and `vertices`. We can process 
+`vertex v` either `before` we have traversed any of the `outgoing edges` 
+from `v` (`process_vertex_early()`) or `after` we have finished 
+processing all of them (`process_vertex_late()`). Sometimes we
+will take special actions at both times, say `process_vertex_early()` 
+to initialize a vertex-specific `data structure`, which will be 
+`modified` on `edge-processing` operations and then 
+analyzed afterwards using `process_vertex_late()`.
+
+In `undirected graphs`, each `edge (x, y)` sits in the `adjacency lists` 
+of vertex `x and y`. Thus there are `two potential times` to process each 
+`edge (x, y)`, namely when `exploring x` and when `exploring y`. 
+The `labeling of edges` as `tree edges or back edges` occurs during the 
+`first time` the edge is `explored`. This first time we see an edge is
+usually a logical time to do `edge-specific processing`. Sometimes, 
+we may want to take different action the second time we see an edge.
+
+But when we encounter `edge (x, y)` from `x`, how can we tell if we 
+have `previously traversed` the edge from `y`? The issue is easy if 
+vertex `y` is `undiscovered`: `(x, y)` becomes a `tree edge` so this 
+`must be` the `first time`. The issue is also easy if `y` has not been 
+`completely processed`; since we `explored the edge` when we explored `y`
+this must be the `second time`. But what if `y` is an `ancestor of x`, 
+and thus in a `discovered state`? Careful reflection will convince you 
+that this must be our `first traversal` unless `y` is the 
+`immediate ancestor` of `x`—i.e. , `(y, x) is a tree edge`. This
+can be established by testing if `y == parent[x]`.
+
+I find that the subtlety of `depth-first search`-based algorithms kicks 
+me in the head whenever I try to implement one. I encourage you to 
+analyze these implementations carefully to see where the problematic 
+cases arise and why.
+
+
+[Table of contents](#table_of_contents)
+
+### <a name='finding_cycles'></a> Finding Cycles
+`Back edges` are the key to finding a `cycle` in an `undirected graph`. 
+If there is no `back edge`, all `edges` are `tree edges`, and `no cycle` 
+exists in a tree. But any `back edge` going from `x` to an ancestor `y` 
+creates a `cycle` with the `tree path` from `y to x`. Such a cycle is 
+easy to find using `dfs`:
+
+```c
+process_edge(int x, int y)
+{
+    if (parent[x] != y) {                   /* found back edge! */
+        printf("Cycle from %d to %d:",y,x);
+        find_path(y,x,parent);
+        printf("\n\n");
+        finished = TRUE;
+    }
+}
+```
+
+The `correctness` of this `cycle detection algorithm` depends upon 
+`processing` `each undirected edge` `exactly once`. Otherwise, a spurious 
+`two-vertex cycle (x, y, x)` could be composed from the two traversals of 
+any `single undirected edge`. We use the `finished` flag to terminate 
+after finding the `first cycle`.
+
+[Table of contents](#table_of_contents)
+
+
+
 
 
 ### <a name='important_questions'></a> Important Questions
