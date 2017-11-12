@@ -110,7 +110,7 @@ the program.
 
   - If `half the elements` move `once`, a `quarter of the elements` `twice`, and so on, the
   total number of movements `M` is given by
-  ![dynamic array equation](../images/dynamic_array_equation.png)
+  ![dynamic array equation](images/dynamic_array_equation.png)
   
   - Thus, each of the `n` elements move only `two times` on average, and the total work
   of managing the `dynamic array` is the same `O(n)` as it would have been if a single
@@ -449,7 +449,7 @@ big integer. Let `α` be the size of the alphabet on which a given
 string `S` is written. Let `char(c)` be a function that maps each 
 symbol of the `alphabet` to a `unique integer` from `0` to `α − 1`. 
 The function  
-![image for hash function](../images/hash_function.png)  
+![image for hash function](images/hash_function.png)  
 maps `each string` to a `unique` (but large) integer by treating the 
 characters of the string as “digits” in a `base-α` number system.
 
@@ -602,7 +602,7 @@ Power in any hierarchically-structured organization is reflected by a `tree`, wh
 
 In this spirit, a `heap-labeled tree` is defined to be a `binary tree` such that the `key labeling` of each `node` `dominates` the `key labeling` of each of its `children`. In a `min-heap`, a node `dominates` its `children` by containing a `smaller key` than they do, while in a `max-heap` `parent nodes` dominate by being `bigger`.
 
-![image_for_min_heap](../images/binary-heap.png)
+![image_for_min_heap](images/binary-heap.png)
 
 The above figure presents a min-heap ordered tree of red-letter years in American history (kudos to you if you can recall what happened each year).
 
@@ -639,7 +639,7 @@ So, we can store any binary tree in an array without pointers. What is the catch
 
 Space efficiency thus demands that we not allow holes in our tree—i.e., that each level be packed as much as it can be. If so, only the last level may be incomplete. By packing the elements of the last level as far to the left as possible, we can represent an `n-key` tree using exactly `n` elements of the array. If we did not enforce these structural constraints, we might need an array of size 2<sup>n</sup> to store the same elements. Since all but the last level is always filled, the height `h` of an `n` element heap is logarithmic because:
 
-![image_for_heap_height_summation](../images/heap_height_summation.png)
+![image_for_heap_height_summation](images/heap_height_summation.png)
 
 so `h = floor(lg n)`.  
 This implicit representation of binary trees saves memory, but is less flexible than using pointers. We cannot store arbitrary tree topologies without wasting large amounts of space. We cannot move subtrees around by just changing a single pointer, only by explicitly moving each of the elements in the subtree. This loss of flexibility explains why we cannot use this idea to represent `binary search trees`, but it works just fine for `heaps`.
@@ -774,7 +774,7 @@ Multiplying the number of calls to `bubble down` `(n)` times an upper bound on t
 
 But note that it is indeed an `upper bound`, because only the last insertion will actually take 	`lg n` steps. Recall that `bubble down` takes time proportional to the `height of the heaps` it is merging. Most of these heaps are extremely small. In a full binary tree on n nodes, there are n/2 nodes that are leaves (i.e. , height 0), n/4 nodes that are height 1, n/8 nodes that are height 2, and so on. In general, there are at most `ceil`(n/2<sup>h+1</sup>) nodes of height `h`, so the cost of building a heap is:
 
-![heap_building_cost](../images/heap_building_cost.png)
+![heap_building_cost](images/heap_building_cost.png)
 
 Since this sum is not quite a `geometric series`, we can’t apply the usual identity to get the sum, but rest assured that the puny contribution of the numerator (h) is crushed by the denominator (2<sup>h</sup>). The series quickly `converges` to `linear`.
 
@@ -1473,7 +1473,7 @@ costs` which might be `dominant` as a function of `a, b, and f(n)`:
   `rapidly enough with n`, then the `cost of the root evaluation` may 
    `dominate`. If so, the the `total running time` is `O(f(n))`.
 
-![master_theorem](../images/master_theorem.jpg)
+![master_theorem](images/master_theorem.jpg)
 
 
 [Table of contents](#table_of_contents)
@@ -1895,7 +1895,7 @@ illustrated below, defines a `shortest path` from the `root` to every
 `other node` in the `tree`. This property makes `breadth-first search` 
 very useful in `shortest path problems`.
 
-![Breadth_first_search](../images/breadth_first_search.png)
+![Breadth_first_search](images/breadth_first_search.png)
 
 
 ```c
@@ -2081,7 +2081,7 @@ the following parent relation:
 |parent|-1   |  1  | 2   | 5   | 1   |  1  |
 
 
-![breadth_first_search](../images/breadth_first_search.png)
+![breadth_first_search](images/breadth_first_search.png)
 
 For the shortest path from 1 to 4, upper-right corner, this parent relation yields
 the path {1, 5, 4}.
