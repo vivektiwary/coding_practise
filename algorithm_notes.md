@@ -55,7 +55,6 @@
 6. [Mathematical concepts and Algorithms](#mathematical_concepts_and_algorithm)
 7. [Puzzles](#puzzles)
 
-
 ## <a name='common_data_structures'></a> Common Data Structures
 
 - Contiguous vs. Linked Data Structures:
@@ -2246,6 +2245,7 @@ can’t tell them apart just by using the graph structure.
 [Table of contents](#table_of_contents)
 
 ### <a name='depth_first_search'></a> Depth-First Search
+
 There are two primary graph traversal algorithms: `breadth-first search 
 (BFS)` and `depth-first search (DFS)`. For certain problems, it makes 
 absolutely `no difference` which you use, but in others the distinction 
@@ -2329,6 +2329,8 @@ are `expanded` `before we finish` with the `traversal from v`, so such
 topologies are `impossible for undirected graphs`. This `edge 
 classification` proves fundamental to the `correctness` of 
 `DFS-based algorithms`.
+
+![dfs-images](images/dfs.png)
 
 **Implementation**:
 

@@ -13,12 +13,14 @@ class Graph {
   int nedges;
   bool directed;
 
-  void display_graph();
-  void insert_edge(int x, int y);
+  void insert_edge(int x, int y, bool directed);
 
  public:
   Graph(int nvertices, int nedges, bool directed);
   void read_graph();
+  void display_graph();
+  int get_nedges();
+  void set_nedges(int edges);
   virtual ~Graph();
 };
 

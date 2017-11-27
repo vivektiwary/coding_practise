@@ -1,0 +1,10 @@
+mkdir bin
+mkdir build
+mkdir doc
+mkdir include
+mkdir lib
+mkdir spike
+touch Makefile
+mkdir src
+mkdir test
+touch README.markdown

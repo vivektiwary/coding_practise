@@ -10,10 +10,10 @@ class EdgeNode {
  public:
   EdgeNode();
   virtual ~EdgeNode();
-  EdgeNode* getNextNode() const;
-  void setNextNode(EdgeNode*);
-  int getYNode() const;
-  void setYNode(int);
+  EdgeNode* get_next_node() const;
+  void set_next_node(EdgeNode*);
+  int get_y_node() const;
+  void set_y_node(int);
 };
 
 #endif /* EDGE_NODE_H */
